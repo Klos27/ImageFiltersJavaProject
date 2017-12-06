@@ -25,12 +25,12 @@ public class MainProcessingServer extends Application {
         this.primaryStage = primaryStage;
 
         //Set a title for primary stage
-        this.primaryStage.setTitle("Processing Server");
+        this.primaryStage.setTitle("Processing ProcessingServer");
 
         //2) Initialize primaryLayout
         initPrimaryLayout();
 
-        //3) Display the Server View
+        //3) Display the ProcessingServer View
         showServerView();
     }
 
@@ -47,7 +47,7 @@ public class MainProcessingServer extends Application {
             primaryStage.setScene(scene); //Set the scene in primary stage.
 
             //Third, show the primary stage
-            primaryStage.setFullScreenExitHint("Processing Server");
+            primaryStage.setFullScreenExitHint("Processing ProcessingServer");
            // primaryStage.setFullScreen(true);
             primaryStage.setAlwaysOnTop(true);
             primaryStage.show(); //Display the primary stage
@@ -56,7 +56,7 @@ public class MainProcessingServer extends Application {
         }
     }
 
-    //Shows Processing Server view in the middle of the screen
+    //Shows Processing ProcessingServer view in the middle of the screen
     public void showServerView() {
         try {
             //load ServerView

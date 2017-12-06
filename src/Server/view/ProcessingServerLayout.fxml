@@ -18,12 +18,12 @@
             <Font size="21.0" />
          </font>
       </Label>
-      <Button fx:id="startServerBtn" layoutX="290.0" layoutY="16.0" mnemonicParsing="false" onAction="#startServer" prefHeight="26.0" prefWidth="141.0" text="Start Server">
+      <Button fx:id="startServerBtn" layoutX="445.0" layoutY="16.0" mnemonicParsing="false" onAction="#startServer" prefHeight="26.0" prefWidth="141.0" text="Start Server">
          <font>
             <Font size="13.0" />
          </font>
       </Button>
-      <Button fx:id="closeServerBtn" layoutX="445.0" layoutY="16.0" mnemonicParsing="false" onAction="#closeServer" prefHeight="26.0" prefWidth="141.0" text="Close Server">
+      <Button fx:id="closeServerBtn" layoutX="445.0" layoutY="16.0" mnemonicParsing="false" onAction="#closeServer" prefHeight="26.0" prefWidth="141.0" text="Close Server" visible="false">
          <font>
             <Font size="13.0" />
          </font>

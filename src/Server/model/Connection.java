@@ -1,45 +1,50 @@
 package Server.model;
 import java.net.*;
 import java.io.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Connection extends Thread {
     DataInputStream input;
     DataOutputStream output;
     Socket clientSocket;
-    private final static String fileOutput = "C:\\Users\\Klos\\Documents\\najsowo.mkv";
+    private String fileNameOutput;  // name of the file from client
+    private String fileNameInput;   // name of the file to send to client
+
     public Connection (Socket aClientSocket) {
         try {
             clientSocket = aClientSocket;
             input = new DataInputStream( clientSocket.getInputStream());
-            output =new DataOutputStream( clientSocket.getOutputStream());
+            output = new DataOutputStream( clientSocket.getOutputStream());
             this.start();
         }
         catch(IOException e) {
-            System.out.println("Connection:"+e.getMessage());
+            System.out.println("Connection problem: "+e.getMessage());
         }
     }
 
     public void run() {
         try {
-            //TODO rebuild this function
-            // an echo server
-            //  String data = input.readUTF();
-            int buffSize = 65536; // max size 65536 bytes [64KB]
-            FileWriter out = new FileWriter("test.txt");
-            BufferedWriter bufWriter = new BufferedWriter(out);
+            //1. Read length of a String (file name)
+                //no need
 
-            FileOutputStream fos = new FileOutputStream(fileOutput);
+            //2. Get filename
+            fileNameOutput = input.readUTF();
+            fileNameInput = ImageFilter.getOutputFilePath(fileNameOutput);
+            //TODO change to store images in folder ex. String fileOutput = "C:\\Users\\Klos\\Documents\\najsowo.mkv"
+
+            //3. Initialize buffers
+            int buffSize = 65536; // max size 65536 bytes [64KB]
+            FileOutputStream fos = new FileOutputStream(fileNameOutput);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
 
-            //Step 1 read length
-            long nb = input.readLong();
-            System.out.println("Read Length "+ nb);
+            //4. Get Size of a file
+            long fileSize = input.readLong();
+            System.out.println("Client's file size: "+ fileSize);
 
-            //byte[] digit = new byte[buffSize];
-            //Step 2 read byte
-            System.out.println("Writing.......");
-            //           for(int i = 0; i < nb; i++)
-            //               digit[i] = input.readByte();
+            //5. Get File
+            System.out.println("Reciving file: " + fileNameOutput);
             int bytesRead;
             byte[] buffer = new byte[buffSize];
             while((bytesRead = input.read(buffer)) != -1){
@@ -47,30 +52,30 @@ public class Connection extends Thread {
             }
             System.out.println("File recived");
 
-            // int bytesRead = input.read(digit, 0, nb);
-            //  bos.write(digit, 0, bytesRead);
+            //6. Process File
+            if(!ImageFilter.sepia(fileNameOutput)){
+                //7. Send Size of a file
+                    //TODO SEND SIZE
+                //8. Send File
+                    //TODO SEND FILE
+                //9. Delete original file and processed File
+                Files.deleteIfExists(FileSystems.getDefault().getPath(fileNameInput));
+                Files.deleteIfExists(FileSystems.getDefault().getPath(fileNameOutput));
+
+            }
+            else{
+                //TODO send ERROR
+            }
+
+            //10. Close buffers
             bos.close();
             fos.close();
-
-/*
-            String st = new String(digit);
-            bufWriter.append(st);
-            bufWriter.close();
-            System.out.println ("receive from : " +
-                    clientSocket.getInetAddress() + ":" +
-                    clientSocket.getPort() + " message - " + st);
-            st = st + "servero";
-            //Step 1 send length
-            output.writeInt(st.length());
-            //Step 2 send length
-            output.writeBytes(st); // UTF is a string encoding
-            //  output.writeUTF(data);
- */       }
+            //END OF CONNECTION
+        }
         catch(EOFException e) {
             System.out.println("EOF:"+e.getMessage()); }
         catch(IOException e) {
             System.out.println("IO:"+e.getMessage());}
-
         finally {
             try {
                 clientSocket.close();

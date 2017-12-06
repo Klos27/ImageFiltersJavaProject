@@ -11,7 +11,7 @@ public class MainHost {
         final String fileInput = "D:\\najs.mkv";
         try {
             // TODO change to another port
-            int serverPort = 6880;
+            int serverPort = 55000;
             int buffSize = 65536;   // max size 65536 bytes [64KB]
             String ip = "localhost";
 //            String data = "Hello, How are you? ";

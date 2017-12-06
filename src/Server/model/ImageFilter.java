@@ -16,13 +16,44 @@ public class ImageFilter {
             return "";
         }
     }
+    private static String getFileExtension(String name) {
+        try {
+            if(name.lastIndexOf(".") < 0)
+                return "";
+            else
+                return name.substring(name.lastIndexOf(".") + 1);
+        } catch (Exception e) {
+            return "";
+        }
+    }
     private static String getFilePathWithoutExt(File file){
         String name = file.getName();
         try {
-            return name.substring(0,name.lastIndexOf(".") - 1);
+            if(name.lastIndexOf(".") < 0)
+                return name;
+            else
+                return name.substring(0,name.lastIndexOf(".") - 1);
         } catch (Exception e) {
-            return "./out";
+            return name;
         }
+    }
+    private static String getFilePathWithoutExt(String name){
+        try {
+            if(name.lastIndexOf(".") < 0)
+                return name;
+            else
+                return name.substring(0,name.lastIndexOf(".") - 1);
+        } catch (Exception e) {
+            return name;
+        }
+    }
+    public static String getOutputFilePath(File file){
+        String outputName = getFilePathWithoutExt(file) + "Out." + getFileExtension(file);    // result C:\\fileNameOut.extansion
+        return outputName;
+    }
+    public static String getOutputFilePath(String name){
+        String outputName = name.substring(0,name.lastIndexOf(".") - 1) + "Out." + getFileExtension(name);    // result C:\\fileNameOut.extansion
+        return outputName;
     }
 
     // pathName = D:\7.bmp or D:\\7.bmp
@@ -90,7 +121,7 @@ public class ImageFilter {
         }
 
 //        String outputName = "D:\\Output." + ext;
-        String outputName = getFilePathWithoutExt(f) + "Out." + ext;    // result C:\\fileNameOut.extansion
+        String outputName = getOutputFilePath(f);    // result C:\\fileNameOut.extansion
         //write img
         try{
             f = new File(outputName);
