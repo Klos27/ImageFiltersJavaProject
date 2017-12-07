@@ -8,6 +8,9 @@ import javax.imageio.ImageIO;
 
 public class ImageFilter {
 
+    //==============================================================================
+    // Get file name and extansion:
+    //==============================================================================
     private static String getFileExtension(File file) {
         String name = file.getName();
         try {
@@ -55,9 +58,25 @@ public class ImageFilter {
         String outputName = name.substring(0,name.lastIndexOf(".") - 1) + "Out." + getFileExtension(name);    // result C:\\fileNameOut.extansion
         return outputName;
     }
+    //==============================================================================
+    // Convert Image:
+    //==============================================================================
+    public static boolean convertImage(String pathName, int type){
+        switch (type){
+            case 1:
+                return sepia(pathName);
+            case 2:
+                return false; //TODO add other filters
+            default:
+                return sepia(pathName);
+        }
+    }
+    //==============================================================================
+    // Image Filters:
+    //==============================================================================
 
     // pathName = D:\7.bmp or D:\\7.bmp
-    public static boolean sepia(String pathName) throws IOException {
+    private static boolean sepia(String pathName) {
         //TODO check if this function is correct
         BufferedImage img = null;
         File f = null;
@@ -134,7 +153,7 @@ public class ImageFilter {
         }
     }
 //--------- Mirror
-        public static void mirror() throws IOException{
+        private static void mirror() throws IOException{
         //TODO this function
 //            // get img size
 //            int width = img.getWidth();
@@ -158,7 +177,7 @@ public class ImageFilter {
 //                    mirror.setRGB(rx, y, p);
 //                }
         }
-        public static void negative() throws IOException {
+        private static void negative() throws IOException {
             //TODO this function
 //---------- negative
 

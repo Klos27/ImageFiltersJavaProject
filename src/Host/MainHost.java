@@ -1,83 +1,80 @@
 package Host;
 
-import java.net.*;
-import java.io.*;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
-public class MainHost {
-    //TODO ADD GUI instead of main
-    public static void main (String args[]) {// arguments supply message and hostname of destination
-        Socket s = null;
-        //final String fileInput = "C:\\Users\\Klos\\Documents\\najs.mkv";
-        final String fileInput = "D:\\najs.mkv";
+import java.io.IOException;
+
+public class MainHost extends Application {
+
+    //This is our PrimaryStage (It contains everything)
+    private Stage primaryStage;
+
+    //This is the BorderPane of RootLayout
+    private BorderPane primaryLayout;
+
+
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+
+        //1) Declare a primary stage (Everything will be on this stage)
+        this.primaryStage = primaryStage;
+
+        //Set a title for primary stage
+        this.primaryStage.setTitle("Host ImageFilter");
+
+        //2) Initialize primaryLayout
+        initPrimaryLayout();
+
+        //3) Display the Host View
+        showHostView();
+    }
+
+    //Initializes the root layout.
+    public void initPrimaryLayout() {
         try {
-            // TODO change to another port
-            int serverPort = 55000;
-            int buffSize = 65536;   // max size 65536 bytes [64KB]
-            String ip = "localhost";
-//            String data = "Hello, How are you? ";
+            //First, load root layout from primaryLayout.fxml
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainHost.class.getResource("view/PrimaryLayout.fxml"));
+            primaryLayout = (BorderPane) loader.load();
 
-            s = new Socket(ip, serverPort);
-//            DataInputStream input = new DataInputStream(s.getInputStream());
-            DataOutputStream output = new DataOutputStream(s.getOutputStream());
+            //Second, show the scene containing the root layout.
+            Scene scene = new Scene(primaryLayout); //We are sending primaryLayout to the Scene.
+            primaryStage.setScene(scene); //Set the scene in primary stage.
 
-            File myFile = new File(fileInput);
-            byte[] mybytearray = new byte[(int) myFile.length()];
-
-            //Step 1 send length
-            System.out.println("Length" + myFile.length());
-            output.writeLong(myFile.length());
-            //Step 2 send length
-            System.out.println("Writing.......");
-            //  output.writeBytes(data); // UTF is a string encoding
-
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
-            long percent = 0;
-            long pack = 0;
-            long fileSize = myFile.length();
-            long numOfPacks = fileSize / (100 * buffSize);
-
-
-            while( bis.read(mybytearray, 0, buffSize) != -1) {
-                output.write(mybytearray, 0, buffSize);
-                pack++;
-                if(pack % numOfPacks == 0){
-                    System.out.println("Postęp : " + percent + "%");
-                    percent++;
-                }
-            }
-            System.out.println("Postęp : " + percent + "%");
-            output.flush();
-/*
-            //Step 1 send length
-            System.out.println("Length" + data.length());
-            output.writeInt(data.length());
-            //Step 2 send length
-            System.out.println("Writing.......");
-            output.writeBytes(data); // UTF is a string encoding
-*/
-
-
-      /*      //Step 1 read length
-            int nb = input.readInt();
-            byte[] digit = new byte[nb];
-            //Step 2 read byte
-            for (int i = 0; i < nb; i++)
-                digit[i] = input.readByte();
-
-            String st = new String(digit);
-            System.out.println("Received: " + st);*/
-        } catch (UnknownHostException e) {
-            System.out.println("Sock:" + e.getMessage());
-        } catch (EOFException e) {
-            System.out.println("EOF:" + e.getMessage());
+            //Third, show the primary stage
+            primaryStage.setFullScreenExitHint("Host App");
+            // primaryStage.setFullScreen(true);
+            primaryStage.setAlwaysOnTop(true);
+            primaryStage.show(); //Display the primary stage
         } catch (IOException e) {
-            System.out.println("IO:" + e.getMessage());
-        } finally {
-            if (s != null)
-                try {
-                    s.close();
-                } catch (IOException e) {/*close failed*/}
+            e.printStackTrace();
         }
+    }
 
+    //Shows Host view in the middle of the screen
+    public void showHostView() {
+        try {
+            //load ServerView
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainHost.class.getResource("view/HostLayout.fxml"));
+            AnchorPane ServerView = (AnchorPane) loader.load();
+
+            // Set HostView into the center of root layout.
+            primaryLayout.setCenter(ServerView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
+
+

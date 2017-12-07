@@ -9,8 +9,9 @@ public class Connection extends Thread {
     DataInputStream input;
     DataOutputStream output;
     Socket clientSocket;
-    private String fileNameOutput;  // name of the file from client
-    private String fileNameInput;   // name of the file to send to client
+    final int bufferSize = 65536; // max size 65536 bytes [64KB]
+    private String clientsFileName;  // name of the file from client
+    private String processedFileName;   // name of the file to send to client
 
     public Connection (Socket aClientSocket) {
         try {
@@ -26,51 +27,67 @@ public class Connection extends Thread {
 
     public void run() {
         try {
-            //1. Read length of a String (file name)
-                //no need
+            // Get conversionType
+            int conversionType = input.readInt();
 
-            //2. Get filename
-            fileNameOutput = input.readUTF();
-            fileNameInput = ImageFilter.getOutputFilePath(fileNameOutput);
+            // Get filename
+            clientsFileName = input.readUTF();
+            processedFileName = ImageFilter.getOutputFilePath(clientsFileName);
             //TODO change to store images in folder ex. String fileOutput = "C:\\Users\\Klos\\Documents\\najsowo.mkv"
 
-            //3. Initialize buffers
-            int buffSize = 65536; // max size 65536 bytes [64KB]
-            FileOutputStream fos = new FileOutputStream(fileNameOutput);
+            // Initialize buffers
+            FileOutputStream fos = new FileOutputStream(clientsFileName);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
 
-            //4. Get Size of a file
+            // Get Size of a file
             long fileSize = input.readLong();
             System.out.println("Client's file size: "+ fileSize);
 
-            //5. Get File
-            System.out.println("Reciving file: " + fileNameOutput);
+            // Get File
+            System.out.println("Reciving file: " + clientsFileName);
             int bytesRead;
-            byte[] buffer = new byte[buffSize];
+            byte[] buffer = new byte[bufferSize];
             while((bytesRead = input.read(buffer)) != -1){
                 bos.write(buffer,0,bytesRead);
             }
             System.out.println("File recived");
 
-            //6. Process File
-            if(!ImageFilter.sepia(fileNameOutput)){
-                //7. Send Size of a file
-                    //TODO SEND SIZE
-                //8. Send File
-                    //TODO SEND FILE
-                //9. Delete original file and processed File
-                Files.deleteIfExists(FileSystems.getDefault().getPath(fileNameInput));
-                Files.deleteIfExists(FileSystems.getDefault().getPath(fileNameOutput));
+            // Process File
+            if(!ImageFilter.convertImage(clientsFileName, conversionType)){
+                // Open buffers
+                File processedFile = new File(processedFileName);
+                buffer = new byte[(int) processedFile.length()];
+                FileInputStream fis = new FileInputStream(processedFile);
+                BufferedInputStream bis = new BufferedInputStream(fis);
 
+                // Send Size of a file
+                System.out.println("Length of processedFile: " + processedFile.length());
+                output.writeLong(processedFile.length());
+
+                // Send File
+                while( bis.read(buffer, 0, bufferSize) != -1) {
+                    output.write(buffer, 0, bufferSize);
+                }
+                output.flush();
+
+                // Close buffers
+                bis.close();
+                fis.close();
             }
             else{
-                //TODO send ERROR
+                //Send error
+                output.writeLong(0);
             }
 
-            //10. Close buffers
+            // Close buffers
             bos.close();
             fos.close();
-            //END OF CONNECTION
+
+            // Delete original file and processed File
+            Files.deleteIfExists(FileSystems.getDefault().getPath(processedFileName));
+            Files.deleteIfExists(FileSystems.getDefault().getPath(clientsFileName));
+
+            // END OF CONNECTION
         }
         catch(EOFException e) {
             System.out.println("EOF:"+e.getMessage()); }
@@ -80,7 +97,9 @@ public class Connection extends Thread {
             try {
                 clientSocket.close();
             }
-            catch (IOException e){/*close failed*/}
+            catch (IOException e){
+                // Close failed
+            }
         }
     }
 }
