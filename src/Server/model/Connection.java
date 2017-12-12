@@ -29,9 +29,12 @@ public class Connection extends Thread {
         try {
             // Get conversionType
             int conversionType = input.readInt();
+            System.out.println("Conversion type: "+ conversionType);
 
             // Get filename
             clientsFileName = input.readUTF();
+            System.out.println("Reciving file: " + clientsFileName);
+            clientsFileName = "E:\\" + clientsFileName;
             processedFileName = ImageFilter.getOutputFilePath(clientsFileName);
             //TODO change to store images in folder ex. String fileOutput = "C:\\Users\\Klos\\Documents\\najsowo.mkv"
 
@@ -44,19 +47,21 @@ public class Connection extends Thread {
             System.out.println("Client's file size: "+ fileSize);
 
             // Get File
-            System.out.println("Reciving file: " + clientsFileName);
+            long fileSizeLeft = fileSize;
             int bytesRead;
             byte[] buffer = new byte[bufferSize];
-            while((bytesRead = input.read(buffer)) != -1){
+            while(fileSizeLeft > 0){
+                bytesRead = input.read(buffer);
                 bos.write(buffer,0,bytesRead);
+                fileSizeLeft -= (long) bytesRead;
             }
             System.out.println("File recived");
 
             // Process File
-            if(!ImageFilter.convertImage(clientsFileName, conversionType)){
+            if(ImageFilter.convertImage(clientsFileName, conversionType)){
                 // Open buffers
                 File processedFile = new File(processedFileName);
-                buffer = new byte[(int) processedFile.length()];
+                buffer = new byte[bufferSize];
                 FileInputStream fis = new FileInputStream(processedFile);
                 BufferedInputStream bis = new BufferedInputStream(fis);
 
@@ -76,6 +81,7 @@ public class Connection extends Thread {
             }
             else{
                 //Send error
+                System.out.println("Error Sent to Client");
                 output.writeLong(0);
             }
 

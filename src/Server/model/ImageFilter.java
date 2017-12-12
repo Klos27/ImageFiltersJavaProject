@@ -52,11 +52,13 @@ public class ImageFilter {
     }
     public static String getOutputFilePath(File file){
         String outputName = getFilePathWithoutExt(file) + "Out." + getFileExtension(file);    // result C:\\fileNameOut.extansion
-        return outputName;
+        //return outputName;
+        return "E:\\output.jpg";
     }
     public static String getOutputFilePath(String name){
         String outputName = name.substring(0,name.lastIndexOf(".") - 1) + "Out." + getFileExtension(name);    // result C:\\fileNameOut.extansion
-        return outputName;
+        //return outputName;
+        return "E:\\output.jpg";
     }
     //==============================================================================
     // Convert Image:
@@ -84,8 +86,8 @@ public class ImageFilter {
         // read img
         try {
             f = new File(pathName);
-            if (f.length() > 1) {
-                System.out.println(f.length());
+            if (f.length() > 0) {
+                System.out.println("File size: " + f.length());
             }
             img = ImageIO.read(f);
             ext = ImageFilter.getFileExtension(f);
@@ -104,7 +106,7 @@ public class ImageFilter {
         int width = img.getWidth();
         int height = img.getHeight();
         int type = img.getType();
-        System.out.println(type);
+        System.out.println("Image type: " + type);
         //convert to sepia
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -143,8 +145,8 @@ public class ImageFilter {
         String outputName = getOutputFilePath(f);    // result C:\\fileNameOut.extansion
         //write img
         try{
-            f = new File(outputName);
-            ImageIO.write(img,ext,f);
+            File fNew = new File(outputName);
+            ImageIO.write(img,ext,fNew);
             return true;
         }
         catch(IOException e){

@@ -11,8 +11,8 @@ public class HostController {
     int processingServerPort = 55000;
     Socket soc = null;
     final int bufferSize = 65536;   // max size 65536 bytes [64KB]
-    String myInputFilePath;  // File's path to send to server
-    String myOutputFilePath; // File recived form server
+    final String myInputFilePath = "D:\\input.jpg";  // File's path to send to server
+    final String myOutputFilePath = "D:\\output.jpg"; // File recived form server
 
     int conversionType = 1;
     /*
@@ -32,9 +32,9 @@ public class HostController {
     }
 
     private void getFilePath() {
-        //TODO get this from the textFiled GUI
-        myInputFilePath = "input.jpg";
-        myOutputFilePath = "output.jpg";
+        //TODO get this from the textField GUI
+        //myInputFilePath = "D:\\input.jpg";
+        //myOutputFilePath = "D:\\output.jpg";
     }
 
     private String getMyFileName() {
@@ -59,14 +59,14 @@ public class HostController {
             DataInputStream input = new DataInputStream(soc.getInputStream());
             DataOutputStream output = new DataOutputStream(soc.getOutputStream());
             File myFile = new File(myInputFilePath);
-            byte[] buffer = new byte[(int) myFile.length()];
+            byte[] buffer = new byte[(int)myFile.length()];
 
             // Send integer- conversionType
             output.writeInt(conversionType);
 
             // Send file name
-            output.writeBytes(myFile.getName()); // UTF is a string encoding
-
+            //output.writeBytes(); // UTF is a string encoding
+            output.writeUTF(myFile.getName());
             // Send file size
             System.out.println("Length of myFile: " + myFile.length());
             output.writeLong(myFile.length());
@@ -74,11 +74,19 @@ public class HostController {
             // Send file
             FileInputStream fis = new FileInputStream(myFile);
             BufferedInputStream bis = new BufferedInputStream(fis);
-            while( bis.read(buffer, 0, bufferSize) != -1) {
-                output.write(buffer, 0, bufferSize);
+
+
+//            System.out.println("fis: " +  fis.available());
+//            System.out.println("bis: " + bis.available());
+            output.flush();
+            int bytesSent;
+            while((bytesSent = bis.read(buffer, 0, bufferSize)) != -1) {
+                output.write(buffer, 0, bytesSent);
             }
             output.flush();
-
+            // Close buffers
+            bis.close();
+            fis.close();
             // Wait for processing file
             System.out.println("Our server is processing your file");
 
@@ -94,6 +102,7 @@ public class HostController {
                 int bytesRead;
                 while((bytesRead = input.read(buffer)) != -1){
                     bos.write(buffer,0,bytesRead);
+                    //TODO change to above version, packet size is always 64KB
                 }
                 System.out.println("File recived");
 
@@ -107,9 +116,7 @@ public class HostController {
                 System.out.println("Server reports error with your file");
             }
 
-            // Close buffers
-            bis.close();
-            fis.close();
+
         } catch (UnknownHostException e) {
             System.out.println("Socket: " + e.getMessage());
         } catch (EOFException e) {
