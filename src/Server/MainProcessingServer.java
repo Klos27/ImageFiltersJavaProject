@@ -49,7 +49,7 @@ public class MainProcessingServer extends Application {
             //Third, show the primary stage
             primaryStage.setFullScreenExitHint("ProcessingServer");
            // primaryStage.setFullScreen(true);
-            primaryStage.setAlwaysOnTop(true);
+//            primaryStage.setAlwaysOnTop(true);
             primaryStage.show(); //Display the primary stage
         } catch (IOException e) {
             e.printStackTrace();

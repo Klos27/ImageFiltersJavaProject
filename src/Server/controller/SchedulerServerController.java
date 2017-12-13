@@ -1,7 +1,7 @@
 package Server.controller;
 
 //javaFX
-import Server.model.ProcessingServer;
+import Server.model.SchedulerServer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,10 +9,10 @@ import javafx.scene.control.TextArea;
 //javaNet
 
 
-public class ProcessingServerController {
+public class SchedulerServerController {
     boolean ifServerIsRunning = false;
     long numberOfClients = 0;
-    ProcessingServer server = new ProcessingServer();
+    SchedulerServer server = new SchedulerServer();
 
     @FXML
     private TextArea resultArea;
@@ -43,14 +43,14 @@ public class ProcessingServerController {
                 startServerBtn.setVisible(false);
                 closeServerBtn.setVisible(true);
             } else {
-                appendInfoToResultArea("ProcessingServer is already running");
+                appendInfoToResultArea("SchedulerServer is already running");
             }
         }
         catch(Exception e){
             appendInfoToResultArea("Starting server failed");
         }
     }
-    //close ProcessingServer
+    //close SchedulerServer
     @FXML
     private void closeServer(ActionEvent actionEvent) throws ClassNotFoundException {
         appendInfoToResultArea("ServerClose...");
@@ -64,30 +64,12 @@ public class ProcessingServerController {
                 startServerBtn.setVisible(true);
                 closeServerBtn.setVisible(false);
             } else {
-                appendInfoToResultArea("ProcessingServer is already closed");
+                appendInfoToResultArea("SchedulerServer is already closed");
             }
         }
         catch(Exception e){
             appendInfoToResultArea("Closing server failed");
         }
     }
-
-//    public void run() {
-//        try{
-//            int serverPort = 6880;
-//            ServerSocket listenSocket = new ServerSocket(serverPort);
-//
-//            System.out.println("server start listening... ... ...");
-//
-//            while(true) {
-//                Socket clientSocket = listenSocket.accept();
-//                ProcessingServerConnection c = new ProcessingServerConnection(clientSocket);
-//                numberOfClients++;
-//                appendInfoToResultArea("Number of Clients: " + numberOfClients);
-//            }
-//        }
-//        catch(IOException e) {
-//            System.out.println("Listen :"+e.getMessage());}
-//    }
 }
 

@@ -50,7 +50,7 @@ public class MainHost extends Application {
             //Third, show the primary stage
             primaryStage.setFullScreenExitHint("Host App");
             // primaryStage.setFullScreen(true);
-            primaryStage.setAlwaysOnTop(true);
+//            primaryStage.setAlwaysOnTop(true);
             primaryStage.show(); //Display the primary stage
         } catch (IOException e) {
             e.printStackTrace();

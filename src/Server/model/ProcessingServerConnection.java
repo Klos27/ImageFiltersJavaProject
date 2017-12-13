@@ -5,15 +5,16 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class Connection extends Thread {
+public class ProcessingServerConnection extends Thread {
     DataInputStream input;
     DataOutputStream output;
     Socket clientSocket;
     final int bufferSize = 65536; // max size 65536 bytes [64KB]
     private String clientsFileName;  // name of the file from client
     private String processedFileName;   // name of the file to send to client
+    static long fileNo = 0;
 
-    public Connection (Socket aClientSocket) {
+    public ProcessingServerConnection(Socket aClientSocket) {
         try {
             clientSocket = aClientSocket;
             input = new DataInputStream( clientSocket.getInputStream());
@@ -21,7 +22,7 @@ public class Connection extends Thread {
             this.start();
         }
         catch(IOException e) {
-            System.out.println("Connection problem: "+e.getMessage());
+            System.out.println("ProcessingServerConnection problem: "+e.getMessage());
         }
     }
 
@@ -34,9 +35,10 @@ public class Connection extends Thread {
             // Get filename
             clientsFileName = input.readUTF();
             System.out.println("Reciving file: " + clientsFileName);
-            clientsFileName = "E:\\" + clientsFileName;
+            //TODO change to store images in folder "Processing", not in main folder
+            //TODO add numbers, instead of file names
+            clientsFileName = ".\\" + clientsFileName;
             processedFileName = ImageFilter.getOutputFilePath(clientsFileName);
-            //TODO change to store images in folder ex. String fileOutput = "C:\\Users\\Klos\\Documents\\najsowo.mkv"
 
             // Initialize buffers
             FileOutputStream fos = new FileOutputStream(clientsFileName);

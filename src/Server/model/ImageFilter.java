@@ -30,12 +30,12 @@ public class ImageFilter {
         }
     }
     private static String getFilePathWithoutExt(File file){
-        String name = file.getName();
+        String name = file.getPath();
         try {
             if(name.lastIndexOf(".") < 0)
                 return name;
             else
-                return name.substring(0,name.lastIndexOf(".") - 1);
+                return name.substring(0,name.lastIndexOf("."));
         } catch (Exception e) {
             return name;
         }
@@ -45,20 +45,18 @@ public class ImageFilter {
             if(name.lastIndexOf(".") < 0)
                 return name;
             else
-                return name.substring(0,name.lastIndexOf(".") - 1);
+                return name.substring(0,name.lastIndexOf("."));
         } catch (Exception e) {
             return name;
         }
     }
     public static String getOutputFilePath(File file){
         String outputName = getFilePathWithoutExt(file) + "Out." + getFileExtension(file);    // result C:\\fileNameOut.extansion
-        //return outputName;
-        return "E:\\output.jpg";
+        return outputName;
     }
     public static String getOutputFilePath(String name){
-        String outputName = name.substring(0,name.lastIndexOf(".") - 1) + "Out." + getFileExtension(name);    // result C:\\fileNameOut.extansion
-        //return outputName;
-        return "E:\\output.jpg";
+        String outputName = getFilePathWithoutExt(name) + "Out." + getFileExtension(name);    // result C:\\fileNameOut.extansion
+        return outputName;
     }
     //==============================================================================
     // Convert Image:
