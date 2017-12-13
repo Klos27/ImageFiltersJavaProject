@@ -133,7 +133,7 @@ public class HostController {
                     DataInputStream input = new DataInputStream(soc.getInputStream());
                     DataOutputStream output = new DataOutputStream(soc.getOutputStream());
                     File myFile = new File(myInputFilePath);
-                    byte[] buffer = new byte[(int) myFile.length()];
+                    byte[] buffer = new byte[bufferSize];
 
                     // Send integer- conversionType
                     output.writeInt(conversionType);
