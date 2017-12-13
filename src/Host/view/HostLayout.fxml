@@ -9,14 +9,17 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Host.controller.HostController">
    <children>
-      <TextField layoutX="52.0" layoutY="43.0" prefHeight="30.0" prefWidth="449.0" text="Choose image file..." />
-      <Button layoutX="504.0" layoutY="42.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" text="..." />
-      <Label layoutX="15.0" layoutY="49.0" prefHeight="19.0" prefWidth="29.0" text="File:" />
+      <TextField layoutX="15.0" layoutY="65.0" prefHeight="30.0" prefWidth="470.0" text="Choose image file..." />
+      <Button layoutX="499.0" layoutY="65.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" text="..." />
+      <Label layoutX="15.0" layoutY="46.0" prefHeight="19.0" prefWidth="58.0" text="File Input:" />
       <Label layoutX="15.0" layoutY="14.0" prefHeight="19.0" prefWidth="470.0" text="Image Filter Application" />
-      <TextArea layoutX="29.0" layoutY="267.0" prefHeight="108.0" prefWidth="544.0" />
+      <TextArea fx:id="consoleOutputArea" layoutX="29.0" layoutY="267.0" prefHeight="108.0" prefWidth="544.0" />
       <Label layoutX="29.0" layoutY="238.0" text="Console Output:" />
-      <Button fx:id="processImageBtn" layoutX="428.0" layoutY="129.0" mnemonicParsing="false" onAction="#processImage" prefHeight="30.0" prefWidth="153.0" text="Send" />
-      <Label layoutX="15.0" layoutY="87.0" text="Filter:" />
-      <ChoiceBox layoutX="52.0" layoutY="83.0" prefHeight="25.0" prefWidth="145.0" />
+      <Button fx:id="processImageBtn" layoutX="420.0" layoutY="223.0" mnemonicParsing="false" onAction="#processImage" prefHeight="30.0" prefWidth="153.0" text="Send" />
+      <Label layoutX="15.0" layoutY="164.0" text="Filter:" />
+      <ChoiceBox layoutX="52.0" layoutY="160.0" prefHeight="25.0" prefWidth="145.0" />
+      <TextField layoutX="15.0" layoutY="122.0" prefHeight="30.0" prefWidth="470.0" text="Choose image file..." />
+      <Button layoutX="499.0" layoutY="122.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" text="..." />
+      <Label layoutX="15.0" layoutY="103.0" prefHeight="19.0" prefWidth="74.0" text="File Output:" />
    </children>
 </AnchorPane>

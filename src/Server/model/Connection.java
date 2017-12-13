@@ -68,10 +68,10 @@ public class Connection extends Thread {
                 // Send Size of a file
                 System.out.println("Length of processedFile: " + processedFile.length());
                 output.writeLong(processedFile.length());
-
+                int bytesSent;
                 // Send File
-                while( bis.read(buffer, 0, bufferSize) != -1) {
-                    output.write(buffer, 0, bufferSize);
+                while(( bytesSent = bis.read(buffer, 0, bufferSize)) != -1) {
+                    output.write(buffer, 0, bytesSent);
                 }
                 output.flush();
 
