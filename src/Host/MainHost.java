@@ -1,5 +1,6 @@
 package Host;
 
+import Host.controller.HostController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,6 +23,7 @@ public class MainHost extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
+
         //1) Declare a primary stage (Everything will be on this stage)
         this.primaryStage = primaryStage;
 
@@ -33,6 +35,7 @@ public class MainHost extends Application {
 
         //3) Display the Host View
         showHostView();
+
     }
 
     //Initializes the root layout.
@@ -51,7 +54,14 @@ public class MainHost extends Application {
             primaryStage.setFullScreenExitHint("Host App");
             // primaryStage.setFullScreen(true);
 //            primaryStage.setAlwaysOnTop(true);
+
+
+
+
             primaryStage.show(); //Display the primary stage
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,6 +85,9 @@ public class MainHost extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+
 }
+
 
 
