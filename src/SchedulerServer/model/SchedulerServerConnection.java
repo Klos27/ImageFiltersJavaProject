@@ -16,7 +16,7 @@ public class SchedulerServerConnection extends Thread {
             this.start();
         }
         catch(IOException e) {
-            System.out.println("SchedulerServerConnection problem: "+e.getMessage());
+            System.out.println("Server Connection problem: "+e.getMessage());
         }
     }
 

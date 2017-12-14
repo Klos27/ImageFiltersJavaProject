@@ -63,7 +63,7 @@ public class MainProcessingServer extends Application {
             loader.setLocation(MainProcessingServer.class.getResource("view/ProcessingServerLayout.fxml"));
             AnchorPane ServerView = (AnchorPane) loader.load();
 
-            // Set ServerrView into the center of root layout.
+            // Set Server View into the center of root layout.
             primaryLayout.setCenter(ServerView);
         } catch (IOException e) {
             e.printStackTrace();

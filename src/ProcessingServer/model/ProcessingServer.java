@@ -28,7 +28,7 @@ public class ProcessingServer extends Thread{
             int serverPort = 55000;
             ServerSocket listenSocket = new ServerSocket(serverPort);
 
-            System.out.println("ProcessingServer starts listening...");
+            System.out.println("Server starts listening...");
 
             while(!Thread.currentThread().isInterrupted()) {
                 Socket clientSocket = listenSocket.accept();

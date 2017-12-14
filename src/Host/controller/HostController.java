@@ -212,7 +212,7 @@ public class HostController {
             }
             else {
                 appendTextToTextArea("Selected file is correct");
-                // Connect to Scheduler ProcessingServer
+                // Connect to Scheduler Server
                 //TODO [Marcin] CONNECT TO SCHEDULER SERVER
                 getSchedulerServerIP();
 
@@ -220,7 +220,7 @@ public class HostController {
                 //TODO [Marcin] Get Processing server ip and port
                 getProcessingServerIP();
                 getConversionType();
-                // Connect to Processing ProcessingServer
+                // Connect to Processing Server
                 try {
                     soc = new Socket(processingServerIP, processingServerPort);
 
@@ -287,8 +287,8 @@ public class HostController {
                         //END OF CONNECTION
                         appendTextToTextArea("Done!");
                     } else {
-                        System.out.println("ProcessingServer reports error with your file");
-                        appendTextToTextArea("ProcessingServer reports error with your file");
+                        System.out.println("Server reports error with your file");
+                        appendTextToTextArea("Server reports error with your file");
                         appendTextToTextArea("Please try again");
                     }
                 }
@@ -296,13 +296,13 @@ public class HostController {
                     appendTextToTextArea("You didn't chose output file");
                 } catch (UnknownHostException e) {
                     System.out.println("Socket: " + e.getMessage());
-                    appendTextToTextArea("ProcessingServer's socket is unavailable");
+                    appendTextToTextArea("Server's socket is unavailable");
                 } catch (EOFException e) {
                     System.out.println("EOF: " + e.getMessage());
                     appendTextToTextArea("There is a problem with your file");
                 } catch (IOException e) {
                     System.out.println("IO: " + e.getMessage());
-                    appendTextToTextArea("ProcessingServer is unavailable");
+                    appendTextToTextArea("Server is unavailable");
                 } finally {
                     //13. Close connections
                     if (soc != null)

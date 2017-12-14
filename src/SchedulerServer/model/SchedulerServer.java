@@ -17,7 +17,7 @@ public class SchedulerServer extends Thread{
             serversList.clearList();
             serversList.loadList();
 
-            System.out.println("Scheduler ProcessingServer starts listening...");
+            System.out.println("Server starts listening...");
 
             while(!Thread.currentThread().isInterrupted()) {
                 Socket clientSocket = listenSocket.accept();
