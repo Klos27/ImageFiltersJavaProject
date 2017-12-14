@@ -1,22 +1,46 @@
 package Host.controller;
 
+
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 
-import java.awt.*;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.concurrent.locks.Condition;
+
 
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class HostController {
     @FXML
     private TextArea consoleOutputArea;
     @FXML
     private Button processImageBtn;
+    @FXML
+    private Button inputFileChoiceButton;
+    @FXML
+    private Button outputFileChoiceButton;
+    @FXML
+    private TextField fileInputTextField;
+    @FXML
+    private TextField fileOutputTextField;
+
+    @FXML
+    private ChoiceBox<String> filterChoiceBox;
+
+//    public Stage stage;
+//
+//    public void setStage(Stage stage) {
+//        this.stage = stage;
+//    }
 
     String processingServerIP;
     int processingServerPort ;
@@ -28,6 +52,7 @@ public class HostController {
     String myOutputFilePath; // File recived form server
     static boolean connectionIsRunning = false;
     int conversionType;
+
     /*
     1 == Sepia (default)
     2 == Negative
@@ -37,6 +62,52 @@ public class HostController {
     6 == BlueImage
     7 == ...
      */
+
+    public void initialize() {
+        filterChoiceBox.getItems().removeAll(filterChoiceBox.getItems());
+        filterChoiceBox.getItems().addAll("Sepia", "Mirror", "Negative");
+
+        filterChoiceBox.getSelectionModel().select("Sepia");
+    }
+    @FXML
+    void setInputFilePath(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open input file");
+
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png", "*.bmp", "*.gif"));
+
+
+        Stage stage = (Stage) inputFileChoiceButton.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(stage);
+         if (file != null) {
+             myInputFilePath = file.toString();
+         }
+        fileInputTextField.setText(myInputFilePath);
+
+    }
+
+    @FXML
+    void setOutputFilePath(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select output file");
+
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JPG", "*.jpg", "*.jpeg"),
+                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("BMP",  "*.bmp"),
+                new FileChooser.ExtensionFilter("GIF",  "*.gif"));
+
+        Stage stage = (Stage) outputFileChoiceButton.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+
+        if (file != null) {
+            myOutputFilePath = file.toString();
+        }
+        fileOutputTextField.setText(myOutputFilePath);
+
+    }
+
     private void getSchedulerServerIP() {
         //TODO [Marcin] get this from file
         schedulerServerIP = "localhost";
@@ -49,15 +120,22 @@ public class HostController {
         processingServerPort = 55000;
     }
 
-    private void getFilePath() {
-        //TODO [Marcin] get this from the textField GUI
-        myInputFilePath = "D:\\input.jpg";
-        myOutputFilePath = "D:\\output.jpg";
-    }
 
     private void getConversionType() {
         //TODO [Marcin] get this from GUI
-        conversionType = 1;
+
+        switch(filterChoiceBox.getValue()) {
+            case "Sepia":  conversionType = 1;
+                break;
+            case "Mirror":  conversionType = 2;
+                break;
+            case "Negative":  conversionType = 3;
+                break;
+            default: conversionType = 1;
+                break;
+        }
+        System.out.println(conversionType);
+        //conversionType = 1;
     }
     @FXML
     private void appendTextToTextArea(String text){
@@ -79,7 +157,7 @@ public class HostController {
     private void processImage() {
         if(connectionIsRunning == false) {
             try {
-                getFilePath();
+                //getFilePath();
                 clearTextArea();
                 appendTextToTextArea("Start");
                 processImageBtn.setVisible(false);
