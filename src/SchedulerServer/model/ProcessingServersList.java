@@ -18,29 +18,27 @@ public class ProcessingServersList {
     }
     public void loadList(){
         //TODO load list from file
-        addServer("localhost", 50000);
+        addServer("localhost", 55000);
     }
 
     private static void refreshList(){
-        while(serverslist.iterator().hasNext()){
-            serverslist.iterator().next().refreshLoad();
+        for(int i = 0; i < serverslist.size(); i++){
+            serverslist.get(i).refreshLoad();
         }
     }
 
-    public static ProcessingServerInfo getBestServer() throws Exception {
+    public static ProcessingServerInfo getBestServer() {
 //        refreshList();
         ProcessingServerInfo bestServ = new ProcessingServerInfo("0.0.0.0", 0, Long.MAX_VALUE);
         ProcessingServerInfo tmp;
-        while(serverslist.iterator().hasNext()){
-            tmp = serverslist.iterator().next();
+        for(int i = 0; i < serverslist.size(); i++){
+            tmp = serverslist.get(i);
             tmp.refreshLoad();
             if((tmp.load >= 0) && tmp.load <= bestServ.load){
                 bestServ = tmp;
             }
         }
         return bestServ;
-
-
     }
 
 

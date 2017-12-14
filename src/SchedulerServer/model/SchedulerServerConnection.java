@@ -22,9 +22,12 @@ public class SchedulerServerConnection extends Thread {
 
     public void run() {
         try {
-        // Get the best server
+            // Get the best server
+            System.out.println("Scheduler: get the best processing server");
             ProcessingServerInfo bestServ = ProcessingServersList.getBestServer();
-        // Send IP and port to Client
+
+            // Send IP and port to Client
+            System.out.println("Send info to client");
             output.writeUTF(bestServ.ipAddress);
             output.writeInt(bestServ.port);
         }

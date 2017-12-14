@@ -56,7 +56,7 @@ public class SchedulerServerController {
         appendInfoToResultArea("ServerClose...");
         try {
             if (ifServerIsRunning) {
-                //TODO closing server, how to kill thread?
+                //TODO closing server
                 server.interrupt();
                 //this.start();
                 ifServerIsRunning = false;
