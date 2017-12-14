@@ -43,7 +43,7 @@ public class HostController {
 //    }
 
     String processingServerIP;
-    int processingServerPort ;
+    int processingServerPort;
     String schedulerServerIP;
     int schedulerServerPort;
     Socket soc = null;
@@ -109,15 +109,38 @@ public class HostController {
     }
 
     private void getSchedulerServerIP() {
-        //TODO [Marcin] get this from file
+        //TODO get this from file
         schedulerServerIP = "localhost";
         schedulerServerPort = 55001;
+
+        // if file does not exist throws IOException or create new file with default parameters
     }
 
-    private void getProcessingServerIP() {
-        //TODO [Marcin] get this from Scheduler server
-        processingServerIP = "localhost";
-        processingServerPort = 55000;
+    private void getProcessingServerIP() throws IOException {
+        try {
+            processingServerIP = "1.1.1.1";
+            processingServerPort = 1;
+            Socket schedulerSoc = new Socket(schedulerServerIP, schedulerServerPort);
+
+            DataInputStream input = new DataInputStream(schedulerSoc.getInputStream());
+
+            processingServerIP = input.readUTF();
+            processingServerPort = input.readInt();
+            System.out.println("processingServerIP: " + processingServerIP);
+            System.out.println("processingServerPort: " +processingServerPort);
+
+        } catch(IOException e){
+            throw new IOException("Scheduler server unavailible");
+        }
+        finally{
+            if (soc != null)
+                try {
+                    soc.close();
+                } catch (IOException e) {/*close failed*/}
+            if((processingServerPort == 0) || processingServerIP.equals("0.0.0.0")){
+                throw new IOException("Processing server unavailible");
+            }
+        }
     }
 
     private void getConversionType() {
@@ -141,7 +164,7 @@ public class HostController {
             default: conversionType = 1;
                 break;
         }
-        System.out.println(conversionType);
+        System.out.println("Conversion type: " + conversionType);
     }
     @FXML
     private void appendTextToTextArea(String text){
@@ -211,17 +234,16 @@ public class HostController {
                 }
             }
             else {
-                appendTextToTextArea("Selected file is correct");
-                // Connect to Scheduler Server
-                //TODO [Marcin] CONNECT TO SCHEDULER SERVER
-                getSchedulerServerIP();
-
-                // Get Processing server ip and port
-                //TODO [Marcin] Get Processing server ip and port
-                getProcessingServerIP();
-                getConversionType();
-                // Connect to Processing Server
                 try {
+                    appendTextToTextArea("Selected file is correct");
+                    // Connect to Scheduler Server
+                    getSchedulerServerIP();
+                    // Get Processing server ip and port
+                    getProcessingServerIP();
+                    // Load Conversion Type
+                    getConversionType();
+
+                    // Connect to Processing Server
                     soc = new Socket(processingServerIP, processingServerPort);
 
                     // Initialize buffers
@@ -302,7 +324,10 @@ public class HostController {
                     appendTextToTextArea("There is a problem with your file");
                 } catch (IOException e) {
                     System.out.println("IO: " + e.getMessage());
-                    appendTextToTextArea("Server is unavailable");
+                    if(e.getMessage().equals("Connection refused: connect"))
+                        appendTextToTextArea("Server is unavailable");
+                    else
+                        appendTextToTextArea(e.getMessage());
                 } finally {
                     //13. Close connections
                     if (soc != null)

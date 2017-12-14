@@ -21,7 +21,9 @@ public class SchedulerServer extends Thread{
 
             while(!Thread.currentThread().isInterrupted()) {
                 Socket clientSocket = listenSocket.accept();
+                System.out.println("New client");
                 SchedulerServerConnection c = new SchedulerServerConnection(clientSocket);
+
             }
             //TODO close all connections if you want to close server
         }
