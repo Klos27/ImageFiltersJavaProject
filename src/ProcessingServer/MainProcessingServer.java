@@ -1,7 +1,6 @@
-package Server;
+package ProcessingServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -9,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MainSchedulerServer extends Application {
+public class MainProcessingServer extends Application {
 
     //This is our PrimaryStage (It contains everything)
     private Stage primaryStage;
@@ -25,7 +24,7 @@ public class MainSchedulerServer extends Application {
         this.primaryStage = primaryStage;
 
         //Set a title for primary stage
-        this.primaryStage.setTitle("SchedulerServer");
+        this.primaryStage.setTitle("ProcessingServer");
 
         //2) Initialize primaryLayout
         initPrimaryLayout();
@@ -47,8 +46,8 @@ public class MainSchedulerServer extends Application {
             primaryStage.setScene(scene); //Set the scene in primary stage.
 
             //Third, show the primary stage
-            primaryStage.setFullScreenExitHint("SchedulerServer");
-            // primaryStage.setFullScreen(true);
+            primaryStage.setFullScreenExitHint("ProcessingServer");
+           // primaryStage.setFullScreen(true);
 //            primaryStage.setAlwaysOnTop(true);
             primaryStage.show(); //Display the primary stage
         } catch (IOException e) {
@@ -61,10 +60,10 @@ public class MainSchedulerServer extends Application {
         try {
             //load ServerView
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainProcessingServer.class.getResource("view/SchedulerServerLayout.fxml"));
+            loader.setLocation(MainProcessingServer.class.getResource("view/ProcessingServerLayout.fxml"));
             AnchorPane ServerView = (AnchorPane) loader.load();
 
-            // Set ServerrView into the center of root layout.
+            // Set Server View into the center of root layout.
             primaryLayout.setCenter(ServerView);
         } catch (IOException e) {
             e.printStackTrace();

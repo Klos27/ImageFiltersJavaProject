@@ -1,16 +1,30 @@
 //singleton
-package Server.model;
+package ProcessingServer.model;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ProcessingServer extends Thread{
-    long numberOfClients = 0;
+    private static long numberOfClients = 0;
+    public static void addClient(){
+        //TODO synchronize this
+        numberOfClients++;
+    }
+    public static void removeClient(){
+        //TODO synchronize this
+        if(numberOfClients > 0)
+            numberOfClients--;
+        else
+            numberOfClients = 0;
+    }
+    public static long getNumOfClients(){
+        return numberOfClients;
+    }
+
     @Override
     public void run() {
         try{
-            //TODO Get port from config file?
             int serverPort = 55000;
             ServerSocket listenSocket = new ServerSocket(serverPort);
 
@@ -19,8 +33,7 @@ public class ProcessingServer extends Thread{
             while(!Thread.currentThread().isInterrupted()) {
                 Socket clientSocket = listenSocket.accept();
                 ProcessingServerConnection c = new ProcessingServerConnection(clientSocket);
-                numberOfClients++;
-               // appendInfoToResultArea("Number of Clients: " + numberOfClients);
+                addClient();
             }
             //TODO close all connections if you want to close server
         }
