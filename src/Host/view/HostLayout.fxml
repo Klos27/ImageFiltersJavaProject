@@ -7,19 +7,24 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Host.controller.HostController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Host.controller.HostController">
    <children>
-      <TextField fx:id="fileInputTextField" layoutX="15.0" layoutY="65.0" prefHeight="30.0" prefWidth="483.0" text="Choose image file..." />
-      <Button fx:id="inputFileChoiceButton" layoutX="512.0" layoutY="65.0" mnemonicParsing="false" onAction="#setInputFilePath" prefHeight="30.0" prefWidth="74.0" text="..." />
-      <Label layoutX="15.0" layoutY="46.0" prefHeight="19.0" prefWidth="58.0" text="File Input:" />
-      <Label layoutX="15.0" layoutY="14.0" prefHeight="19.0" prefWidth="470.0" text="Image Filter Application" />
-      <TextArea fx:id="consoleOutputArea" layoutX="16.0" layoutY="237.0" prefHeight="163.0" prefWidth="571.0" />
-      <Label layoutX="16.0" layoutY="215.0" text="Console Output:" />
-      <Button fx:id="processImageBtn" layoutX="433.0" layoutY="200.0" mnemonicParsing="false" onAction="#processImage" prefHeight="30.0" prefWidth="153.0" text="Send" />
-      <Label layoutX="15.0" layoutY="164.0" text="Filter:" />
-      <ChoiceBox fx:id="filterChoiceBox" layoutX="52.0" layoutY="160.0" prefHeight="25.0" prefWidth="240.0" />
-      <TextField fx:id="fileOutputTextField" layoutX="15.0" layoutY="122.0" prefHeight="30.0" prefWidth="483.0" text="Choose image file..." />
-      <Button fx:id="outputFileChoiceButton" layoutX="512.0" layoutY="122.0" mnemonicParsing="false" onAction="#setOutputFilePath" prefHeight="30.0" prefWidth="74.0" text="..." />
-      <Label layoutX="15.0" layoutY="103.0" prefHeight="19.0" prefWidth="74.0" text="File Output:" />
+      <TextField fx:id="fileInputTextField" disable="true" layoutX="14.0" layoutY="97.0" prefHeight="30.0" prefWidth="483.0" promptText="Choose image file..." />
+      <Button fx:id="inputFileChoiceButton" layoutX="511.0" layoutY="97.0" mnemonicParsing="false" onAction="#setInputFilePath" prefHeight="30.0" prefWidth="74.0" text="..." />
+      <Label layoutX="14.0" layoutY="78.0" prefHeight="19.0" prefWidth="58.0" text="File Input:" />
+      <Label layoutX="14.0" layoutY="14.0" prefHeight="19.0" prefWidth="470.0" text="Image Filter Application" />
+      <TextArea fx:id="consoleOutputArea" editable="false" layoutX="15.0" layoutY="269.0" prefHeight="163.0" prefWidth="571.0" wrapText="true" />
+      <Label layoutX="15.0" layoutY="247.0" text="Console Output:" />
+      <Button fx:id="processImageBtn" layoutX="432.0" layoutY="232.0" mnemonicParsing="false" onAction="#processImage" prefHeight="30.0" prefWidth="153.0" text="Send" />
+      <Label layoutX="14.0" layoutY="196.0" text="Filter:" />
+      <ChoiceBox fx:id="filterChoiceBox" layoutX="51.0" layoutY="192.0" prefHeight="25.0" prefWidth="240.0" />
+      <TextField fx:id="fileOutputTextField" disable="true" layoutX="14.0" layoutY="154.0" prefHeight="30.0" prefWidth="483.0" promptText="Choose image file..." />
+      <Button fx:id="outputFileChoiceButton" layoutX="511.0" layoutY="154.0" mnemonicParsing="false" onAction="#setOutputFilePath" prefHeight="30.0" prefWidth="74.0" text="..." />
+      <Label layoutX="14.0" layoutY="135.0" prefHeight="19.0" prefWidth="74.0" text="File Output:" />
+      <Label layoutX="193.0" layoutY="33.0" text="Only img files are allowed: *.jpg, *.jpeg, *.png, *.bmp, *.gif" />
+      <Label layoutX="193.0" layoutY="50.0" text="In *.gif img file will be converted only first frame!" />
+      <Label layoutX="193.0" layoutY="136.0" text="Output file is the same type as input" />
+      <Label layoutX="193.0" layoutY="70.0" prefHeight="17.0" prefWidth="349.0" text="Max size of img is 20MB and max resolution is 10000x10000px" />
+      <Label layoutX="193.0" layoutY="15.0" text="Rules:" />
    </children>
 </AnchorPane>

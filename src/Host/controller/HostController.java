@@ -57,15 +57,15 @@ public class HostController {
     1 == Sepia (default)
     2 == Negative
     3 == MirrorImage
-    4 == RedImage
-    5 == GreenImage
-    6 == BlueImage
-    7 == ...
+    4 == GrayScale
+    5 == BlackAndWhite
+    6 == RedImage
+    7 == GreenImage
+    8 == BlueImage
      */
-
     public void initialize() {
         filterChoiceBox.getItems().removeAll(filterChoiceBox.getItems());
-        filterChoiceBox.getItems().addAll("Sepia", "Mirror", "Negative");
+        filterChoiceBox.getItems().addAll("Sepia", "Negative", "GrayScale", "Black&White", "Mirror", "RedImage", "GreenImage", "BlueImage" );
 
         filterChoiceBox.getSelectionModel().select("Sepia");
     }
@@ -120,22 +120,28 @@ public class HostController {
         processingServerPort = 55000;
     }
 
-
     private void getConversionType() {
-        //TODO [Marcin] get this from GUI
-
         switch(filterChoiceBox.getValue()) {
             case "Sepia":  conversionType = 1;
                 break;
-            case "Mirror":  conversionType = 2;
+            case "Negative":  conversionType = 2;
                 break;
-            case "Negative":  conversionType = 3;
+            case "Mirror":  conversionType = 3;
+                break;
+            case "GrayScale":  conversionType = 4;
+                break;
+            case "Black&White":  conversionType = 5;
+                break;
+            case "RedImage":  conversionType = 6;
+                break;
+            case "GreenImage":  conversionType = 7;
+                break;
+            case "BlueImage":  conversionType = 8;
                 break;
             default: conversionType = 1;
                 break;
         }
         System.out.println(conversionType);
-        //conversionType = 1;
     }
     @FXML
     private void appendTextToTextArea(String text){
@@ -145,7 +151,7 @@ public class HostController {
     private void clearTextArea(){
         consoleOutputArea.setText("");
     }
-    private long checkFileSize(String pathToFile){
+    private long checkFileSize(String pathToFile) throws java.lang.NullPointerException{
         File myFile = new File(pathToFile);
         if(myFile.exists())
             return myFile.length();
@@ -160,7 +166,7 @@ public class HostController {
                 //getFilePath();
                 clearTextArea();
                 appendTextToTextArea("Start");
-                processImageBtn.setVisible(false);
+                processImageBtn.setDisable(true);
 
                 Platform.runLater(new Runnable() {
                     @Override public void run() {
@@ -181,17 +187,28 @@ public class HostController {
         public void run() {
             connectionIsRunning = true;
             // Check if fileSize is smaller than 20MB
-            long checkFileS = checkFileSize(myInputFilePath);
-            if(checkFileS < 1 || checkFileS > 20971520) {
-                appendTextToTextArea("Select correct file!");
+            long checkFileS = 0;
+            boolean outFileCorrect = false;
+            try{
+                checkFileS = checkFileSize(myInputFilePath);
+                File tmp = new File(myOutputFilePath);
+                outFileCorrect = true;
+            }
+            catch(java.lang.NullPointerException e){
+//                appendTextToTextArea("Select input file!");
+            }
+            if(checkFileS < 1 || checkFileS > 20971520 || !outFileCorrect) {
+                appendTextToTextArea("Select correct files!");
                 if(checkFileS < 1)
-                    appendTextToTextArea("File does not exist");
-                else {
+                    appendTextToTextArea("Input File does not exist");
+                else if(checkFileS > 20971520){
                     appendTextToTextArea("File size: " + checkFileS / 1024 + " KB");
                     appendTextToTextArea("File size is greater than 20MB");
                     appendTextToTextArea("Please select file smaller than 20MB");
                 }
-                processImageBtn.setVisible(true);
+                else{
+                    appendTextToTextArea("Output file path is not correct!");
+                }
             }
             else {
                 appendTextToTextArea("Selected file is correct");
@@ -268,10 +285,15 @@ public class HostController {
                         fos.close();
 
                         //END OF CONNECTION
+                        appendTextToTextArea("Done!");
                     } else {
                         System.out.println("Server reports error with your file");
+                        appendTextToTextArea("Server reports error with your file");
+                        appendTextToTextArea("Please try again");
                     }
-                    appendTextToTextArea("Done!");
+                }
+                catch(java.lang.NullPointerException e){
+                    appendTextToTextArea("You didn't chose output file");
                 } catch (UnknownHostException e) {
                     System.out.println("Socket: " + e.getMessage());
                     appendTextToTextArea("Server's socket is unavailable");
@@ -291,7 +313,7 @@ public class HostController {
             }
             System.out.println("End of thread connection");
             connectionIsRunning = false;
-            processImageBtn.setVisible(true);
+            processImageBtn.setDisable(false);
         }
     }
 
