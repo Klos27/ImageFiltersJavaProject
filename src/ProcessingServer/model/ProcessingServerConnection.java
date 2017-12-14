@@ -1,9 +1,8 @@
-package Server.model;
+package ProcessingServer.model;
 import java.net.*;
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class ProcessingServerConnection extends Thread {
     DataInputStream input;

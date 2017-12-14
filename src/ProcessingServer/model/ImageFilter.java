@@ -1,4 +1,4 @@
-package Server.model;
+package ProcessingServer.model;
 
 import java.io.File;
 import java.io.IOException;
@@ -351,7 +351,8 @@ public class ImageFilter {
                 b = p & 0xff;
 
                 int gray =  (int)((r * 0.30) + (g * 0.59) + (b * 0.11));
-
+                if(gray > 255)
+                    gray = 255;
 
                 //set RGB
                 p = (a << 24) | (gray << 16) | (gray << 8) | gray;
@@ -412,7 +413,7 @@ public class ImageFilter {
                 b = p & 0xff;
 
                 int blackAndWhite =  (int)((r * 0.30) + (g * 0.59) + (b * 0.11));
-                if(blackAndWhite > 128){
+                if(blackAndWhite > 192){
                     blackAndWhite = 255;
                 }
                 else

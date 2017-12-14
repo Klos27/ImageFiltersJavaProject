@@ -1,7 +1,8 @@
-package Server.controller;
+package ProcessingServer.controller;
 
 //javaFX
-import Server.model.SchedulerServer;
+import ProcessingServer.model.ProcessingServer;
+import ProcessingServer.model.ProcessingServerPriority;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,10 +10,10 @@ import javafx.scene.control.TextArea;
 //javaNet
 
 
-public class SchedulerServerController {
+public class ProcessingServerController {
     boolean ifServerIsRunning = false;
-    long numberOfClients = 0;
-    SchedulerServer server = new SchedulerServer();
+    ProcessingServer server = new ProcessingServer();
+    ProcessingServerPriority serverPriority = new ProcessingServerPriority();
 
     @FXML
     private TextArea resultArea;
@@ -39,18 +40,18 @@ public class SchedulerServerController {
             if (!ifServerIsRunning) {
                 server.start();
                 ifServerIsRunning = true;
-                appendInfoToResultArea("Number of Clients: " + numberOfClients);
+                appendInfoToResultArea("Number of Clients: " + ProcessingServer.getNumOfClients());
                 startServerBtn.setVisible(false);
                 closeServerBtn.setVisible(true);
             } else {
-                appendInfoToResultArea("SchedulerServer is already running");
+                appendInfoToResultArea("ProcessingServer is already running");
             }
         }
         catch(Exception e){
             appendInfoToResultArea("Starting server failed");
         }
     }
-    //close SchedulerServer
+    //close ProcessingServer
     @FXML
     private void closeServer(ActionEvent actionEvent) throws ClassNotFoundException {
         appendInfoToResultArea("ServerClose...");
@@ -64,12 +65,30 @@ public class SchedulerServerController {
                 startServerBtn.setVisible(true);
                 closeServerBtn.setVisible(false);
             } else {
-                appendInfoToResultArea("SchedulerServer is already closed");
+                appendInfoToResultArea("ProcessingServer is already closed");
             }
         }
         catch(Exception e){
             appendInfoToResultArea("Closing server failed");
         }
     }
+
+//    public void run() {
+//        try{
+//            int serverPort = 6880;
+//            ServerSocket listenSocket = new ServerSocket(serverPort);
+//
+//            System.out.println("server start listening... ... ...");
+//
+//            while(true) {
+//                Socket clientSocket = listenSocket.accept();
+//                ProcessingServerConnection c = new ProcessingServerConnection(clientSocket);
+//                numberOfClients++;
+//                appendInfoToResultArea("Number of Clients: " + numberOfClients);
+//            }
+//        }
+//        catch(IOException e) {
+//            System.out.println("Listen :"+e.getMessage());}
+//    }
 }
 
