@@ -61,23 +61,59 @@ public class ImageFilter {
     //==============================================================================
     // Convert Image:
     //==============================================================================
+        /*
+  1 == Sepia (default)
+  2 == Negative
+  3 == MirrorImage
+  4 == GrayScale
+  5 == BlackAndWhite
+  6 == RedImage
+  7 == GreenImage
+  8 == BlueImage
+   */
     public static boolean convertImage(String pathName, int type){
         switch (type){
             case 1:
                 return sepia(pathName);
             case 2:
-                return false; //TODO add other filters
+                return negative(pathName);
+            case 3:
+                return mirror(pathName);
+            case 4:
+                return grayScale(pathName);
+            case 5:
+                return blackAndWhite(pathName);
+            case 6:
+                return redImage(pathName);
+            case 7:
+                return greenImage(pathName);
+            case 8:
+                return blueImage(pathName);
             default:
                 return sepia(pathName);
         }
     }
+
+    private static boolean checkIfFileIsCorrect(String ext){
+        if (!ext.equalsIgnoreCase("jpg") &&
+            !ext.equalsIgnoreCase("jpeg") &&
+            !ext.equalsIgnoreCase("png") &&
+            !ext.equalsIgnoreCase("bmp") &&
+            !ext.equalsIgnoreCase("gif")) {
+                System.out.println("Wybrano niepoprawny format pliku");
+                System.out.println("Dostępne formaty: JPG, JPEG, PNG, BMP, GIF");
+                System.out.println("Przy wyborze ruchomego GIF, wynikiem będzie nieruchoma pierwsza klatka obrazu");
+                return false;
+        }
+        else
+            return true;
+    }
+
     //==============================================================================
     // Image Filters:
     //==============================================================================
 
-    // pathName = D:\7.bmp or D:\\7.bmp
     private static boolean sepia(String pathName) {
-        //TODO check if this function is correct
         BufferedImage img = null;
         File f = null;
         String ext = "jpg";
@@ -86,19 +122,19 @@ public class ImageFilter {
             f = new File(pathName);
             if (f.length() > 0) {
                 System.out.println("File size: " + f.length());
+                img = ImageIO.read(f);
+                ext = ImageFilter.getFileExtension(f);
+                System.out.println(ext);
             }
-            img = ImageIO.read(f);
-            ext = ImageFilter.getFileExtension(f);
-            System.out.println(ext);
+            else
+                return false;
         } catch (IOException e) {
             System.out.println(e);
-        }
-        if (ext.equalsIgnoreCase("tif")) {
-            System.out.println("Wybrano niepoprawny format pliku");
-            System.out.println("Dostępne formaty: JPG, JPEG, PNG, BMP, GIF");
-            System.out.println("Przy wyborze ruchomego GIF, wynikiem będzie nieruchoma pierwsza klatka obrazu");
             return false;
-            //exit(1);
+        }
+
+        if ( !checkIfFileIsCorrect(ext)){
+            return false;
         }
         // get img size
         int width = img.getWidth();
@@ -106,13 +142,14 @@ public class ImageFilter {
         int type = img.getType();
         System.out.println("Image type: " + type);
         //convert to sepia
+        int p,a,r,g,b;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int p = img.getRGB(x, y);
-                int a = (p >> 24) & 0xff;
-                int r = (p >> 16) & 0xff;
-                int g = (p >> 8) & 0xff;
-                int b = p & 0xff;
+                p = img.getRGB(x, y);
+                a = (p >> 24) & 0xff;
+                r = (p >> 16) & 0xff;
+                g = (p >> 8) & 0xff;
+                b = p & 0xff;
 
                 // calc new r,g,b sepia
                 int tr = (int) (0.393 * r + 0.769 * g + 0.189 * b);
@@ -139,7 +176,6 @@ public class ImageFilter {
             }
         }
 
-//        String outputName = "D:\\Output." + ext;
         String outputName = getOutputFilePath(f);    // result C:\\fileNameOut.extansion
         //write img
         try{
@@ -153,41 +189,423 @@ public class ImageFilter {
         }
     }
 //--------- Mirror
-        private static void mirror() throws IOException{
-        //TODO this function
-//            // get img size
-//            int width = img.getWidth();
-//            int height = img.getHeight();
-//
-//            int type = img.getType();
-//            //mirror
-//            BufferedImage mirror = new BufferedImage(1, 1, type);
-//            try {
-//                mirror = new BufferedImage(width * 2, height, type);
-//            } catch (java.lang.OutOfMemoryError e) {
-//                System.out.println("Przekroczono maksymalny rozmiar obrazu, wybierz inny obraz");
-//                exit(1);
-//            }
-//
-//            for (int y = 0; y < height; y++)
-//                for (int lx = 0, rx = width * 2 - 1; lx < width; lx++, rx--) {
-//                    int p = img.getRGB(lx, y);
-//
-//                    mirror.setRGB(lx, y, p);
-//                    mirror.setRGB(rx, y, p);
-//                }
-        }
-        private static void negative() throws IOException {
-            //TODO this function
-//---------- negative
+        private static boolean mirror(String pathName){
+            BufferedImage img = null;
+            File f = null;
+            String ext = "jpg";
+            // read img
+            try {
+                f = new File(pathName);
+                if (f.length() > 0) {
+                    System.out.println("File size: " + f.length());
+                    img = ImageIO.read(f);
+                    ext = ImageFilter.getFileExtension(f);
+                    System.out.println(ext);
+                }
+                else
+                    return false;
+            } catch (IOException e) {
+                System.out.println(e);
+                return false;
+            }
 
-//            r = 255 - r;
-//            g = 255 - g;
-//            b = 255 - b;
-//
-//            set RGB
-//            p = (a << 24) | (r << 16) | (g << 8) | b;
-//
-//            img.setRGB(x, y, p);
+            if ( !checkIfFileIsCorrect(ext)){
+                return false;
+            }
+            // get img size
+            int width = img.getWidth();
+            int height = img.getHeight();
+            int type = img.getType();
+            System.out.println("Image type: " + type);
+
+            // Init buffer
+            BufferedImage mirror;
+            try {
+                mirror = new BufferedImage(width * 2, height, type);
+            } catch (java.lang.OutOfMemoryError e) {
+                System.out.println("Przekroczono maksymalny rozmiar obrazu, wybierz inny obraz");
+                return false;
+            } catch (Exception e){
+                return false;
+            }
+            //convert to mirror
+            int p;
+            for (int y = 0; y < height; y++)
+                for (int lx = 0, rx = width * 2 - 1; lx < width; lx++, rx--) {
+                    p = img.getRGB(lx, y);
+                    mirror.setRGB(lx, y, p);
+                    mirror.setRGB(rx, y, p);
+                }
+
+            String outputName = getOutputFilePath(f);    // result C:\\fileNameOut.extansion
+            //write img
+            try{
+                File fNew = new File(outputName);
+                ImageIO.write(mirror,ext,fNew);
+                return true;
+            }
+            catch(IOException e){
+                System.out.println(e);
+                return false;
+            }
         }
+//--------- Negative
+        private static boolean negative(String pathName) {
+            BufferedImage img = null;
+            File f = null;
+            String ext = "jpg";
+            // read img
+            try {
+                f = new File(pathName);
+                if (f.length() > 0) {
+                    System.out.println("File size: " + f.length());
+                    img = ImageIO.read(f);
+                    ext = ImageFilter.getFileExtension(f);
+                    System.out.println(ext);
+                }
+                else
+                    return false;
+            } catch (IOException e) {
+                System.out.println(e);
+                return false;
+            }
+
+            if ( !checkIfFileIsCorrect(ext)){
+                return false;
+            }
+            // get img size
+            int width = img.getWidth();
+            int height = img.getHeight();
+            int type = img.getType();
+            System.out.println("Image type: " + type);
+            //convert to negative
+            int p,a,r,g,b;
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    p = img.getRGB(x, y);
+                    a = (p >> 24) & 0xff;
+                    r = (p >> 16) & 0xff;
+                    g = (p >> 8) & 0xff;
+                    b = p & 0xff;
+
+                    r = 255 - r;
+                    g = 255 - g;
+                    b = 255 - b;
+
+                    //set RGB
+                    p = (a << 24) | (r << 16) | (g << 8) | b;
+                    img.setRGB(x, y, p);
+                }
+            }
+
+            String outputName = getOutputFilePath(f);    // result C:\\fileNameOut.extansion
+            //write img
+            try{
+                File fNew = new File(outputName);
+                ImageIO.write(img,ext,fNew);
+                return true;
+            }
+            catch(IOException e){
+                System.out.println(e);
+                return false;
+            }
+
+        }
+//--------- GrayScale
+    private static boolean grayScale(String pathName) {
+        BufferedImage img = null;
+        File f = null;
+        String ext = "jpg";
+        // read img
+        try {
+            f = new File(pathName);
+            if (f.length() > 0) {
+                System.out.println("File size: " + f.length());
+                img = ImageIO.read(f);
+                ext = ImageFilter.getFileExtension(f);
+                System.out.println(ext);
+            }
+            else
+                return false;
+        } catch (IOException e) {
+            System.out.println(e);
+            return false;
+        }
+
+        if ( !checkIfFileIsCorrect(ext)){
+            return false;
+        }
+        // get img size
+        int width = img.getWidth();
+        int height = img.getHeight();
+        int type = img.getType();
+        System.out.println("Image type: " + type);
+        //convert to GrayScale
+        int p,a,r,g,b;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                p = img.getRGB(x, y);
+                a = (p >> 24) & 0xff;
+                r = (p >> 16) & 0xff;
+                g = (p >> 8) & 0xff;
+                b = p & 0xff;
+
+                int gray =  (int)((r * 0.30) + (g * 0.59) + (b * 0.11));
+
+
+                //set RGB
+                p = (a << 24) | (gray << 16) | (gray << 8) | gray;
+                img.setRGB(x, y, p);
+            }
+        }
+
+        String outputName = getOutputFilePath(f);    // result C:\\fileNameOut.extansion
+        //write img
+        try{
+            File fNew = new File(outputName);
+            ImageIO.write(img,ext,fNew);
+            return true;
+        }
+        catch(IOException e){
+            System.out.println(e);
+            return false;
+        }
+
+    }
+//--------- BlackAndWhite
+    private static boolean blackAndWhite(String pathName) {
+        BufferedImage img = null;
+        File f = null;
+        String ext = "jpg";
+        // read img
+        try {
+            f = new File(pathName);
+            if (f.length() > 0) {
+                System.out.println("File size: " + f.length());
+                img = ImageIO.read(f);
+                ext = ImageFilter.getFileExtension(f);
+                System.out.println(ext);
+            }
+            else
+                return false;
+        } catch (IOException e) {
+            System.out.println(e);
+            return false;
+        }
+
+        if ( !checkIfFileIsCorrect(ext)){
+            return false;
+        }
+        // get img size
+        int width = img.getWidth();
+        int height = img.getHeight();
+        int type = img.getType();
+        System.out.println("Image type: " + type);
+        //convert to BlackAndWhite
+        int p,a,r,g,b;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                p = img.getRGB(x, y);
+                a = (p >> 24) & 0xff;
+                r = (p >> 16) & 0xff;
+                g = (p >> 8) & 0xff;
+                b = p & 0xff;
+
+                int blackAndWhite =  (int)((r * 0.30) + (g * 0.59) + (b * 0.11));
+                if(blackAndWhite > 128){
+                    blackAndWhite = 255;
+                }
+                else
+                    blackAndWhite = 0;
+
+                //set RGB
+                p = (a << 24) | (blackAndWhite << 16) | (blackAndWhite << 8) | blackAndWhite;
+                img.setRGB(x, y, p);
+            }
+        }
+
+        String outputName = getOutputFilePath(f);    // result C:\\fileNameOut.extansion
+        //write img
+        try{
+            File fNew = new File(outputName);
+            ImageIO.write(img,ext,fNew);
+            return true;
+        }
+        catch(IOException e){
+            System.out.println(e);
+            return false;
+        }
+    }
+//--------- RedImage
+    private static boolean redImage(String pathName) {
+        BufferedImage img = null;
+        File f = null;
+        String ext = "jpg";
+        // read img
+        try {
+            f = new File(pathName);
+            if (f.length() > 0) {
+                System.out.println("File size: " + f.length());
+                img = ImageIO.read(f);
+                ext = ImageFilter.getFileExtension(f);
+                System.out.println(ext);
+            }
+            else
+                return false;
+        } catch (IOException e) {
+            System.out.println(e);
+            return false;
+        }
+
+        if ( !checkIfFileIsCorrect(ext)){
+            return false;
+        }
+        // get img size
+        int width = img.getWidth();
+        int height = img.getHeight();
+        int type = img.getType();
+        System.out.println("Image type: " + type);
+        //convert to RedImage
+        int p,a,r,g,b;
+        g = 0;
+        b = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                p = img.getRGB(x, y);
+                a = (p >> 24) & 0xff;
+                r = (p >> 16) & 0xff;
+
+                //set RGB
+                p = (a << 24) | (r << 16) | (g << 8) | b;
+                img.setRGB(x, y, p);
+            }
+        }
+
+        String outputName = getOutputFilePath(f);    // result C:\\fileNameOut.extansion
+        //write img
+        try{
+            File fNew = new File(outputName);
+            ImageIO.write(img,ext,fNew);
+            return true;
+        }
+        catch(IOException e){
+            System.out.println(e);
+            return false;
+        }
+    }
+//--------- GreenImage
+    private static boolean greenImage(String pathName) {
+        BufferedImage img = null;
+        File f = null;
+        String ext = "jpg";
+        // read img
+        try {
+            f = new File(pathName);
+            if (f.length() > 0) {
+                System.out.println("File size: " + f.length());
+                img = ImageIO.read(f);
+                ext = ImageFilter.getFileExtension(f);
+                System.out.println(ext);
+            }
+            else
+                return false;
+        } catch (IOException e) {
+            System.out.println(e);
+            return false;
+        }
+
+        if ( !checkIfFileIsCorrect(ext)){
+            return false;
+        }
+        // get img size
+        int width = img.getWidth();
+        int height = img.getHeight();
+        int type = img.getType();
+        System.out.println("Image type: " + type);
+        //convert to RedImage
+        int p,a,r,g,b;
+        r = 0;
+        b = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                p = img.getRGB(x, y);
+                a = (p >> 24) & 0xff;
+                g = (p >> 8) & 0xff;
+
+                //set RGB
+                p = (a << 24) | (r << 16) | (g << 8) | b;
+                img.setRGB(x, y, p);
+            }
+        }
+
+        String outputName = getOutputFilePath(f);    // result C:\\fileNameOut.extansion
+        //write img
+        try{
+            File fNew = new File(outputName);
+            ImageIO.write(img,ext,fNew);
+            return true;
+        }
+        catch(IOException e){
+            System.out.println(e);
+            return false;
+        }
+    }
+//--------- BlueImage
+    private static boolean blueImage(String pathName) {
+        BufferedImage img = null;
+        File f = null;
+        String ext = "jpg";
+        // read img
+        try {
+            f = new File(pathName);
+            if (f.length() > 0) {
+                System.out.println("File size: " + f.length());
+                img = ImageIO.read(f);
+                ext = ImageFilter.getFileExtension(f);
+                System.out.println(ext);
+            }
+            else
+                return false;
+        } catch (IOException e) {
+            System.out.println(e);
+            return false;
+        }
+
+        if ( !checkIfFileIsCorrect(ext)){
+            return false;
+        }
+        // get img size
+        int width = img.getWidth();
+        int height = img.getHeight();
+        int type = img.getType();
+        System.out.println("Image type: " + type);
+        //convert to RedImage
+        int p,a,r,g,b;
+        r = 0;
+        g = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                p = img.getRGB(x, y);
+                a = (p >> 24) & 0xff;
+                b = p & 0xff;
+
+                //set RGB
+                p = (a << 24) | (r << 16) | (g << 8) | b;
+                img.setRGB(x, y, p);
+            }
+        }
+
+        String outputName = getOutputFilePath(f);    // result C:\\fileNameOut.extansion
+        //write img
+        try{
+            File fNew = new File(outputName);
+            ImageIO.write(img,ext,fNew);
+            return true;
+        }
+        catch(IOException e){
+            System.out.println(e);
+            return false;
+        }
+    }
 }
+
