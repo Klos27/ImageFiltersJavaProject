@@ -37,7 +37,14 @@ public class ProcessingServerConnection implements Runnable {
             clientsFileName = input.readUTF();
             System.out.println("Reciving file: " + clientsFileName);
             //TODO change to store images in folder "Processing", not in main folder
-            //TODO add numbers, instead of file names
+
+            // Change file name to clientNo
+            String ext = ImageFilter.getFileExtension(clientsFileName);
+            if(ext.isEmpty())
+                clientsFileName = String.valueOf(ProcessingServer.getClientNo());
+            else
+                clientsFileName = String.valueOf(ProcessingServer.getClientNo()) + "." + ext;
+
             clientsFileName = ".\\" + clientsFileName;
             processedFileName = ImageFilter.getOutputFilePath(clientsFileName);
 

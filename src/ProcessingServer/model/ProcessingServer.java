@@ -11,11 +11,13 @@ import java.util.concurrent.Executors;
 
 public class ProcessingServer extends Thread{
     private static final Object synchronizer = new Object();
+    private static final Object numberSynchronizer = new Object();
     int serverPort;
     ExecutorService executor;
     ServerSocket listenSocket = null;
     public static boolean isServerRunning = false;
     private static long serverLoad = 0;
+    private static long clientNo = 0;
 
     public ProcessingServer(int serverPort){
         this.serverPort = serverPort;
@@ -45,6 +47,14 @@ public class ProcessingServer extends Thread{
     public static long getLoad(){
         return serverLoad;
     }
+
+    public static long getClientNo(){
+        synchronized (numberSynchronizer){
+            clientNo++;
+            return clientNo;
+        }
+    }
+
     @Override
     public void run() {
         try{

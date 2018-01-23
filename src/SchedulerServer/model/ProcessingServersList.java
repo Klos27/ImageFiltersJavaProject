@@ -19,7 +19,7 @@ public class ProcessingServersList {
     }
 
     public void loadList(){
-        //TODO load list from file
+        //TODO load list from file or add GUI option to add servers
         addServer("localhost", 55002);
     }
 
