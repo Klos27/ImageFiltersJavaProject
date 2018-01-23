@@ -109,7 +109,7 @@ public class HostController {
     }
 
     private void getSchedulerServerIP() {
-        //TODO get this from file
+        //TODO get this from input text
         schedulerServerIP = "localhost";
         schedulerServerPort = 55001;
 
@@ -341,8 +341,4 @@ public class HostController {
             processImageBtn.setDisable(false);
         }
     }
-
-
-
-
 }

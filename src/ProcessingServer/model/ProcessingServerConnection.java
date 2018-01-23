@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 
-public class ProcessingServerConnection extends Thread {
+public class ProcessingServerConnection implements Runnable {
     DataInputStream input;
     DataOutputStream output;
     Socket clientSocket;
@@ -12,13 +12,15 @@ public class ProcessingServerConnection extends Thread {
     private String clientsFileName;  // name of the file from client
     private String processedFileName;   // name of the file to send to client
     static long fileNo = 0;
+    private boolean loadAdded = false;
+    private long fileSize = 0;
 
     public ProcessingServerConnection(Socket aClientSocket) {
         try {
             clientSocket = aClientSocket;
             input = new DataInputStream( clientSocket.getInputStream());
             output = new DataOutputStream( clientSocket.getOutputStream());
-            this.start();
+//            this.start();
         }
         catch(IOException e) {
             System.out.println("ProcessingServerConnection problem: "+e.getMessage());
@@ -44,8 +46,10 @@ public class ProcessingServerConnection extends Thread {
             BufferedOutputStream bos = new BufferedOutputStream(fos);
 
             // Get Size of a file
-            long fileSize = input.readLong();
+            fileSize = input.readLong();
             System.out.println("Client's file size: "+ fileSize);
+            ProcessingServer.addLoad(fileSize);
+            loadAdded = true;
 
             // Get File
             long fileSizeLeft = fileSize;
@@ -101,6 +105,10 @@ public class ProcessingServerConnection extends Thread {
         catch(IOException e) {
             System.out.println("IO:"+e.getMessage());}
         finally {
+            if(loadAdded) {
+                ProcessingServer.subLoad(fileSize);
+                loadAdded = false;
+            }
             try {
                 clientSocket.close();
             }
