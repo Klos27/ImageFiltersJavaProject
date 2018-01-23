@@ -1,17 +1,11 @@
 package Host.controller;
 
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-
 import javafx.fxml.FXML;
-
-
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
-
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
@@ -32,15 +26,12 @@ public class HostController {
     private TextField fileInputTextField;
     @FXML
     private TextField fileOutputTextField;
-
+    @FXML
+    private TextField serverIPField;
+    @FXML
+    private TextField serverPortField;
     @FXML
     private ChoiceBox<String> filterChoiceBox;
-
-//    public Stage stage;
-//
-//    public void setStage(Stage stage) {
-//        this.stage = stage;
-//    }
 
     String processingServerIP;
     int processingServerPort;
@@ -105,15 +96,20 @@ public class HostController {
             myOutputFilePath = file.toString();
         }
         fileOutputTextField.setText(myOutputFilePath);
-
     }
 
     private void getSchedulerServerIP() {
-        //TODO get this from file
-        schedulerServerIP = "localhost";
-        schedulerServerPort = 55001;
-
-        // if file does not exist throws IOException or create new file with default parameters
+        schedulerServerIP = "0.0.0.0";
+        schedulerServerPort = 0;
+        try{
+            schedulerServerIP = serverIPField.getText();
+            schedulerServerPort = Integer.parseInt(serverPortField.getText());
+        } catch (Exception e){
+            appendTextToTextArea("Incorrect values of scheduler server");
+            appendTextToTextArea("Please enter correct values");
+            schedulerServerIP = "0.0.0.0";
+            schedulerServerPort = 0;
+        }
     }
 
     private void getProcessingServerIP() throws IOException {
@@ -185,11 +181,12 @@ public class HostController {
     @FXML
     private void processImage() {
         if(connectionIsRunning == false) {
+            clearTextArea();
+            appendTextToTextArea("Start");
+            processImageBtn.setDisable(true);
+            getSchedulerServerIP();
             try {
                 //getFilePath();
-                clearTextArea();
-                appendTextToTextArea("Start");
-                processImageBtn.setDisable(true);
 
                 Platform.runLater(new Runnable() {
                     @Override public void run() {
@@ -237,7 +234,7 @@ public class HostController {
                 try {
                     appendTextToTextArea("Selected file is correct");
                     // Connect to Scheduler Server
-                    getSchedulerServerIP();
+//                    getSchedulerServerIP();   // done before entering into this function (check processImage())
                     // Get Processing server ip and port
                     getProcessingServerIP();
                     // Load Conversion Type
@@ -341,8 +338,4 @@ public class HostController {
             processImageBtn.setDisable(false);
         }
     }
-
-
-
-
 }

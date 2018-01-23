@@ -2,17 +2,21 @@ package SchedulerServer.controller;
 
 //javaFX
 import SchedulerServer.model.SchedulerServer;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 //javaNet
 
 
 public class SchedulerServerController {
-    boolean ifServerIsRunning = false;
-    long numberOfClients = 0;
-    SchedulerServer server = new SchedulerServer();
+    static boolean ifServerIsRunning = false;
+    static SchedulerServer server = null;
+    public static boolean safeServerClose = false;
+    private static int serverPort;
 
     @FXML
     private TextArea resultArea;
@@ -20,7 +24,16 @@ public class SchedulerServerController {
     private Button startServerBtn;
     @FXML
     private Button closeServerBtn;
-
+    @FXML
+    private Label infoLabel;
+    @FXML
+    private Label serverPortLabel;
+    @FXML
+    private Label loadInfoLabel;
+    @FXML
+    private TextField serverPortField;
+    @FXML
+    private TextField loadInfoPortField;
     //Set information to Text Area
     @FXML
     private void setInfoToResultArea(String infoText) {
@@ -31,45 +44,57 @@ public class SchedulerServerController {
         resultArea.appendText("\n" + infoText);
     }
 
+    public static SchedulerServer getServer(){
+        return server;
+    }
     //start ProcessingServer
     @FXML
     private void startServer(ActionEvent actionEvent) throws ClassNotFoundException {
+        resultArea.setVisible(true);
         appendInfoToResultArea("ServerStart...");
         try {
             if (!ifServerIsRunning) {
+                serverPort = Integer.parseInt(serverPortField.getText());
+                server = new SchedulerServer(serverPort);
                 server.start();
                 ifServerIsRunning = true;
-                appendInfoToResultArea("Number of Clients: " + numberOfClients);
                 startServerBtn.setVisible(false);
                 closeServerBtn.setVisible(true);
+                serverPortField.setVisible(false);
+                serverPortLabel.setVisible(false);
+                loadInfoLabel.setVisible(false);
+                loadInfoPortField.setVisible(false);
+                infoLabel.setVisible(false);
+                resultArea.setText("Server is running");
             } else {
                 appendInfoToResultArea("SchedulerServer is already running");
             }
         }
         catch(Exception e){
             appendInfoToResultArea("Starting server failed");
+            appendInfoToResultArea("Please try again or restart app");
+            infoLabel.setVisible(true);
+            stopServers();
+            ifServerIsRunning = false;
         }
     }
     //close SchedulerServer
     @FXML
-    private void closeServer(ActionEvent actionEvent) throws ClassNotFoundException {
+    private void closeServer(ActionEvent actionEvent){
         appendInfoToResultArea("ServerClose...");
-        try {
-            if (ifServerIsRunning) {
-                //TODO closing server
-                server.interrupt();
-                //this.start();
-                ifServerIsRunning = false;
-                //appendInfoToResultArea("Number of Clients: " + numberOfClients);
-                startServerBtn.setVisible(true);
-                closeServerBtn.setVisible(false);
-            } else {
-                appendInfoToResultArea("SchedulerServer is already closed");
-            }
+        // safe server Closing
+        safeServerClose = true;
+        stopServers();
+        Platform.exit();
+    }
+    public static void stopServers(){
+        if(server != null && !server.isInterrupted()){
+            server.close();
+            server.interrupt();
         }
-        catch(Exception e){
-            appendInfoToResultArea("Closing server failed");
-        }
+    }
+    public static int getServerPort(){
+        return serverPort;
     }
 }
 

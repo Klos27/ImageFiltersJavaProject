@@ -1,44 +1,82 @@
 //singleton
 package ProcessingServer.model;
 
+import ProcessingServer.controller.ProcessingServerController;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ProcessingServer extends Thread{
-    private static long numberOfClients = 0;
-    public static void addClient(){
-        //TODO synchronize this
-        numberOfClients++;
+    private static final Object synchronizer = new Object();
+    private static final Object numberSynchronizer = new Object();
+    int serverPort;
+    ExecutorService executor;
+    ServerSocket listenSocket = null;
+    public static boolean isServerRunning = false;
+    private static long serverLoad = 0;
+    private static long clientNo = 0;
+
+    public ProcessingServer(int serverPort){
+        this.serverPort = serverPort;
+        executor = Executors.newCachedThreadPool();
     }
-    public static void removeClient(){
-        //TODO synchronize this
-        if(numberOfClients > 0)
-            numberOfClients--;
-        else
-            numberOfClients = 0;
+    public void close(){
+        executor.shutdown();
+        isServerRunning = false;
+        if(listenSocket != null)
+            try {
+                listenSocket.close();
+                System.out.println("Processing server socket closed!");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
-    public static long getNumOfClients(){
-        return numberOfClients;
+    public static void addLoad(long loadValue){
+        synchronized(synchronizer){
+            serverLoad += loadValue;
+        }
+    }
+    public static void subLoad(long loadValue){
+        synchronized (synchronizer){
+            serverLoad -= loadValue;
+        }
+    }
+    public static long getLoad(){
+        return serverLoad;
+    }
+
+    public static long getClientNo(){
+        synchronized (numberSynchronizer){
+            clientNo++;
+            return clientNo;
+        }
     }
 
     @Override
     public void run() {
         try{
-            int serverPort = 55000;
-            ServerSocket listenSocket = new ServerSocket(serverPort);
-
-            System.out.println("Server starts listening...");
-
-            while(!Thread.currentThread().isInterrupted()) {
+            listenSocket = new ServerSocket(serverPort);
+            System.out.println("Processing server starts listening...");
+            isServerRunning = true;
+            while (!Thread.currentThread().isInterrupted()) {
                 Socket clientSocket = listenSocket.accept();
-                ProcessingServerConnection c = new ProcessingServerConnection(clientSocket);
-                addClient();
+                executor.execute(new ProcessingServerConnection(clientSocket));
             }
-            //TODO close all connections if you want to close server
         }
         catch(IOException e) {
-            System.out.println("Listen :"+e.getMessage());
+            System.out.println("Listen : "+e.getMessage());
+        }
+        finally {
+            if(listenSocket != null)
+                try {
+                    listenSocket.close();
+                    System.out.println("Processing server socket closed!");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
         }
     }
 }

@@ -11,7 +11,7 @@ public class ImageFilter {
     //==============================================================================
     // Get file name and extansion:
     //==============================================================================
-    private static String getFileExtension(File file) {
+    public static String getFileExtension(File file) {
         String name = file.getName();
         try {
             return name.substring(name.lastIndexOf(".") + 1);
@@ -19,7 +19,7 @@ public class ImageFilter {
             return "";
         }
     }
-    private static String getFileExtension(String name) {
+    public static String getFileExtension(String name) {
         try {
             if(name.lastIndexOf(".") < 0)
                 return "";

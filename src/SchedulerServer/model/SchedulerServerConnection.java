@@ -3,7 +3,7 @@ package SchedulerServer.model;
 import java.net.*;
 import java.io.*;
 
-public class SchedulerServerConnection extends Thread {
+public class SchedulerServerConnection implements Runnable {
     DataInputStream input;
     DataOutputStream output;
     Socket clientSocket;
@@ -13,7 +13,6 @@ public class SchedulerServerConnection extends Thread {
             clientSocket = aClientSocket;
             input = new DataInputStream( clientSocket.getInputStream());
             output = new DataOutputStream( clientSocket.getOutputStream());
-            this.start();
         }
         catch(IOException e) {
             System.out.println("Server Connection problem: "+e.getMessage());
@@ -29,7 +28,7 @@ public class SchedulerServerConnection extends Thread {
             // Send IP and port to Client
             System.out.println("Send info to client");
             output.writeUTF(bestServ.ipAddress);
-            output.writeInt(bestServ.port);
+            output.writeInt(bestServ.processingPort);
         }
         catch(Exception e) {
             System.out.println("Error: "+e.getMessage());

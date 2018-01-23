@@ -1,9 +1,11 @@
 package ProcessingServer.model;
 
+import ProcessingServer.controller.ProcessingServerController;
+
 import java.io.*;
 import java.net.Socket;
 
-public class ProcessingServerPriorityConnection extends Thread {
+public class ProcessingServerPriorityConnection implements Runnable {
     DataInputStream input;
     DataOutputStream output;
     Socket clientSocket;
@@ -12,7 +14,6 @@ public class ProcessingServerPriorityConnection extends Thread {
         try {
             clientSocket = aClientSocket;
             output = new DataOutputStream( clientSocket.getOutputStream());
-            this.start();
         }
         catch(IOException e) {
             System.out.println("ProcessingServerPriorityConnection problem: "+e.getMessage());
@@ -21,7 +22,8 @@ public class ProcessingServerPriorityConnection extends Thread {
 
     public void run() {
         try {
-                output.writeLong(ProcessingServer.getNumOfClients());
+                output.writeLong(ProcessingServer.getLoad());
+                output.writeInt(ProcessingServerController.getServerPort());
                 output.flush();
             // END OF CONNECTION
         }

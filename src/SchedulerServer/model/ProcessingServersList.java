@@ -12,13 +12,15 @@ public class ProcessingServersList {
 
    public ProcessingServersList(){
        serverslist = new ArrayList<ProcessingServerInfo>();
+       loadList();
    }
     private void addServer(String ipAddress, int port){
        serverslist.add(new ProcessingServerInfo(ipAddress,port));
     }
+
     public void loadList(){
-        //TODO load list from file
-        addServer("localhost", 55000);
+        //TODO load list from file or add GUI option to add servers
+        addServer("localhost", 55002);
     }
 
     private static void refreshList(){
@@ -28,7 +30,7 @@ public class ProcessingServersList {
     }
 
     public static ProcessingServerInfo getBestServer() {
-//        refreshList();
+        //refreshList();    // better do it in loop below
         ProcessingServerInfo bestServ = new ProcessingServerInfo("0.0.0.0", 0, Long.MAX_VALUE);
         ProcessingServerInfo tmp;
         for(int i = 0; i < serverslist.size(); i++){
