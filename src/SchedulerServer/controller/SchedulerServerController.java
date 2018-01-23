@@ -32,8 +32,7 @@ public class SchedulerServerController {
     private Label loadInfoLabel;
     @FXML
     private TextField serverPortField;
-    @FXML
-    private TextField loadInfoPortField;
+
     //Set information to Text Area
     @FXML
     private void setInfoToResultArea(String infoText) {
@@ -63,7 +62,6 @@ public class SchedulerServerController {
                 serverPortField.setVisible(false);
                 serverPortLabel.setVisible(false);
                 loadInfoLabel.setVisible(false);
-                loadInfoPortField.setVisible(false);
                 infoLabel.setVisible(false);
                 resultArea.setText("Server is running");
             } else {

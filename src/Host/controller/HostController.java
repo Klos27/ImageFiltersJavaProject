@@ -257,7 +257,7 @@ public class HostController {
                     appendTextToTextArea("File: " + myFile.getPath());
 
                     // Send file size
-                    System.out.println("Length of myFile: " + myFile.length());
+//                    System.out.println("Length of myFile: " + myFile.length());
                     appendTextToTextArea("Length of myFile: " + myFile.length());
                     output.writeLong(myFile.length());
 
@@ -277,17 +277,17 @@ public class HostController {
                     appendTextToTextArea("File has been Sent");
 
                     // Wait for processing file
-                    System.out.println("Our server is processing your file");
+//                    System.out.println("Our server is processing your file");
                     appendTextToTextArea("Our server is processing your file");
                     // Get file size
                     long processedFileSize = input.readLong();
-                    System.out.println("Servers's file size: " + processedFileSize);
+//                    System.out.println("Servers's file size: " + processedFileSize);
                     appendTextToTextArea("Servers's file size: " + processedFileSize);
                     if (processedFileSize > 0) {
                         // Get processed File
                         FileOutputStream fos = new FileOutputStream(myOutputFilePath);
                         BufferedOutputStream bos = new BufferedOutputStream(fos);
-                        System.out.println("Reciving file: " + myOutputFilePath);
+//                        System.out.println("Reciving file: " + myOutputFilePath);
                         appendTextToTextArea("Reciving file: " + myOutputFilePath);
                         buffer = new byte[bufferSize];
                         int bytesRead;
@@ -297,7 +297,7 @@ public class HostController {
                             bos.write(buffer, 0, bytesRead);
                             fileSizeLeft -= (long) bytesRead;
                         }
-                        System.out.println("File recived");
+//                        System.out.println("File recived");
                         appendTextToTextArea("File recived");
                         // Close buffers
                         bos.close();
@@ -306,7 +306,7 @@ public class HostController {
                         //END OF CONNECTION
                         appendTextToTextArea("Done!");
                     } else {
-                        System.out.println("Server reports error with your file");
+//                        System.out.println("Server reports error with your file");
                         appendTextToTextArea("Server reports error with your file");
                         appendTextToTextArea("Please try again");
                     }
@@ -314,13 +314,13 @@ public class HostController {
                 catch(java.lang.NullPointerException e){
                     appendTextToTextArea("You didn't chose output file");
                 } catch (UnknownHostException e) {
-                    System.out.println("Socket: " + e.getMessage());
+//                    System.out.println("Socket: " + e.getMessage());
                     appendTextToTextArea("Server's socket is unavailable");
                 } catch (EOFException e) {
-                    System.out.println("EOF: " + e.getMessage());
+//                    System.out.println("EOF: " + e.getMessage());
                     appendTextToTextArea("There is a problem with your file");
                 } catch (IOException e) {
-                    System.out.println("IO: " + e.getMessage());
+//                    System.out.println("IO: " + e.getMessage());
                     if(e.getMessage().equals("Connection refused: connect"))
                         appendTextToTextArea("Server is unavailable");
                     else
@@ -333,7 +333,7 @@ public class HostController {
                         } catch (IOException e) {/*close failed*/}
                 }
             }
-            System.out.println("End of thread connection");
+//            System.out.println("End of thread connection");
             connectionIsRunning = false;
             processImageBtn.setDisable(false);
         }

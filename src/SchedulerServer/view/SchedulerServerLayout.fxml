@@ -13,11 +13,10 @@
         <children>
             <TextField fx:id="serverPortField" layoutX="120.0" layoutY="21.0" prefHeight="25.0" prefWidth="256.0" promptText="Default: 55001" text="55001" />
             <Label fx:id="serverPortLabel" layoutX="14.0" layoutY="22.0" prefHeight="23.0" prefWidth="67.0" text="Server port" />
-            <Button fx:id="startServerBtn" layoutX="432.0" layoutY="20.0" mnemonicParsing="false" onAction="#startServer" prefHeight="62.0" prefWidth="116.0" text="Server Start" />
-            <Label fx:id="infoLabel" layoutX="45.0" layoutY="85.0" prefHeight="17.0" prefWidth="544.0" text="Error while starting server" textFill="RED" visible="false" />
+            <Button fx:id="startServerBtn" layoutX="471.0" layoutY="19.0" mnemonicParsing="false" onAction="#startServer" prefHeight="48.0" prefWidth="107.0" text="Server Start" />
+            <Label fx:id="infoLabel" layoutX="14.0" layoutY="82.0" prefHeight="17.0" prefWidth="544.0" text="Error while starting server" textFill="RED" visible="false" />
             <Button fx:id="closeServerBtn" layoutX="8.0" layoutY="8.0" mnemonicParsing="false" onAction="#closeServer" prefHeight="25.0" prefWidth="188.0" text="Safe shutdown server" visible="false" />
-            <Label fx:id="loadInfoLabel" layoutX="14.0" layoutY="56.0" text="Load info port" />
-            <TextField fx:id="loadInfoPortField" layoutX="120.0" layoutY="52.0" prefHeight="25.0" prefWidth="256.0" promptText="Default: 55002" text="55002" />
+            <Label fx:id="loadInfoLabel" layoutX="14.0" layoutY="48.0" prefHeight="17.0" prefWidth="439.0" text="Processing servers are loaded from processingServersList/processingServers.txt" />
         </children>
     </AnchorPane>
 </top>
@@ -29,4 +28,3 @@
     </AnchorPane>
 </center>
 </BorderPane>
-
