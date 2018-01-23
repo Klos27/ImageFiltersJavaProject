@@ -1,0 +1,9 @@
+# lines which starts with # are comments
+# but remember you cannot put any space before #
+# place there any number of processing servers
+# They are listed as IP_address;Port  where IP_addres could be string or numbers
+#And Port has to be loadInfoPort, not processingPort!
+#Servers could be off, it doesn't matter
+# Default server is localhost;55002 and localhost;55003
+localhost;55002
+localhost;55003
