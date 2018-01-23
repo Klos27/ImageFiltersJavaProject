@@ -3,30 +3,30 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SchedulerServer.controller.SchedulerServerController">
-    <children>
-        <TextArea fx:id="resultArea" layoutX="14.0" layoutY="52.0" prefHeight="334.0" prefWidth="573.0" wrapText="true">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </TextArea>
-        <Label layoutX="14.0" layoutY="14.0" prefHeight="32.0" prefWidth="386.0" text="Scheduler Server">
-            <font>
-                <Font size="21.0" />
-            </font>
-        </Label>
-        <Button fx:id="startServerBtn" layoutX="445.0" layoutY="16.0" mnemonicParsing="false" onAction="#startServer" prefHeight="26.0" prefWidth="141.0" text="Start Server">
-            <font>
-                <Font size="13.0" />
-            </font>
-        </Button>
-        <Button fx:id="closeServerBtn" layoutX="445.0" layoutY="16.0" mnemonicParsing="false" onAction="#closeServer" prefHeight="26.0" prefWidth="141.0" text="Close Server" visible="false">
-            <font>
-                <Font size="13.0" />
-            </font>
-        </Button>
-    </children>
-</AnchorPane>
+<BorderPane fx:id="rootBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SchedulerServer.controller.SchedulerServerController">
+<top>
+    <AnchorPane prefHeight="112.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+        <children>
+            <TextField fx:id="serverPortField" layoutX="120.0" layoutY="21.0" prefHeight="25.0" prefWidth="256.0" promptText="Default: 55001" text="55001" />
+            <Label fx:id="serverPortLabel" layoutX="14.0" layoutY="22.0" prefHeight="23.0" prefWidth="67.0" text="Server port" />
+            <Button fx:id="startServerBtn" layoutX="432.0" layoutY="20.0" mnemonicParsing="false" onAction="#startServer" prefHeight="62.0" prefWidth="116.0" text="Server Start" />
+            <Label fx:id="infoLabel" layoutX="45.0" layoutY="85.0" prefHeight="17.0" prefWidth="544.0" text="Error while starting server" textFill="RED" visible="false" />
+            <Button fx:id="closeServerBtn" layoutX="8.0" layoutY="8.0" mnemonicParsing="false" onAction="#closeServer" prefHeight="25.0" prefWidth="188.0" text="Safe shutdown server" visible="false" />
+            <Label fx:id="loadInfoLabel" layoutX="14.0" layoutY="56.0" text="Load info port" />
+            <TextField fx:id="loadInfoPortField" layoutX="120.0" layoutY="52.0" prefHeight="25.0" prefWidth="256.0" promptText="Default: 55002" text="55002" />
+        </children>
+    </AnchorPane>
+</top>
+<center>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <children>
+            <TextArea fx:id="resultArea" layoutX="6.0" layoutY="7.0" prefHeight="422.0" prefWidth="587.0" visible="false" />
+        </children>
+    </AnchorPane>
+</center>
+</BorderPane>
+

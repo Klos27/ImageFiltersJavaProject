@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 //javaNet
 
 public class ProcessingServerController {
-    boolean ifServerIsRunning = false;
+    static boolean ifServerIsRunning = false;
     static ProcessingServer server = null;
     static ProcessingServerPriority serverPriority = null;
     public static boolean safeServerClose = false;
@@ -89,7 +89,7 @@ public class ProcessingServerController {
     }
     //close ProcessingServer
     @FXML
-    private void closeServer(ActionEvent actionEvent) throws ClassNotFoundException {
+    private void closeServer(ActionEvent actionEvent) {
         appendInfoToResultArea("ServerClose...");
         // safe server Closing
         safeServerClose = true;

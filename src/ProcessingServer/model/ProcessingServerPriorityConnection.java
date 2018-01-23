@@ -1,5 +1,7 @@
 package ProcessingServer.model;
 
+import ProcessingServer.controller.ProcessingServerController;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -21,6 +23,7 @@ public class ProcessingServerPriorityConnection implements Runnable {
     public void run() {
         try {
                 output.writeLong(ProcessingServer.getLoad());
+                output.writeInt(ProcessingServerController.getServerPort());
                 output.flush();
             // END OF CONNECTION
         }

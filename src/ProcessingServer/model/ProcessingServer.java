@@ -27,7 +27,7 @@ public class ProcessingServer extends Thread{
         if(listenSocket != null)
             try {
                 listenSocket.close();
-                System.out.println("Server socket closed!");
+                System.out.println("Processing server socket closed!");
             } catch (IOException e) {
                 e.printStackTrace();
             }
