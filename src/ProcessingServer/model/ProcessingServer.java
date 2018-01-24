@@ -45,7 +45,10 @@ public class ProcessingServer extends Thread{
         }
     }
     public static long getLoad(){
-        return serverLoad;
+        // version 1 - return only how much Bytes this server is processing
+//        return serverLoad;
+        // version 2 - return cpu load in %
+        return ProcessingServerController.getServerLoad();
     }
 
     public static long getClientNo(){
