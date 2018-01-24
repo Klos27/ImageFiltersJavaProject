@@ -30,7 +30,7 @@ public class ProcessingServerInfo {
 //            DataOutputStream output = new DataOutputStream(soc.getOutputStream());
             long newLoad = input.readLong();
             int newServerProcessingPort = input.readInt();
-            if(newLoad >= 0){
+            if(newLoad >= -1){
                 load = newLoad;
             }
             if(newServerProcessingPort>0)

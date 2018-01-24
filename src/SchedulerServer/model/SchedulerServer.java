@@ -51,10 +51,6 @@ public class SchedulerServer extends Thread{
         try{
             listenSocket = new ServerSocket(serverPort);
 
-            serversList = new ProcessingServersList();
-            serversList.clearList();
-            serversList.loadList();
-
             System.out.println("Server starts listening...");
             isServerRunning = true;
 
