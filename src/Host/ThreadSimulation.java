@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class ThreadSimulation extends Thread{
     boolean connectionIsRunning = false;
-    String myInputFilePath = "4.png";  // File's path to send to server
+    String myInputFilePath = "TestImage1.jpg";  // File's path to send to server
     String myOutputFilePath; // File recived form server
     int conversionType;
     int i = 0;
@@ -31,7 +31,7 @@ public class ThreadSimulation extends Thread{
 
     private void setOutputFilePath() {
 
-        myOutputFilePath = String.format("TestImageOutput%04d.png",i);
+        myOutputFilePath = String.format("Testy\\TestImageOutput%04d.jpg",i);
         System.out.println(myOutputFilePath);
     }
 
@@ -109,7 +109,6 @@ public class ThreadSimulation extends Thread{
                 System.out.println("File: " + myFile.getPath());
 
                 // Send file size
-                System.out.println("Length of myFile: " + myFile.length());
                 System.out.println("Length of myFile: " + myFile.length());
                 output.writeLong(myFile.length());
 

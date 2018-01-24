@@ -50,6 +50,9 @@ public class ProcessingServer extends Thread{
         // version 2 - return cpu load in %
         return ProcessingServerController.getServerLoad();
     }
+    public static long getLoadedBytes(){
+        return serverLoad;
+    }
 
     public static long getClientNo(){
         synchronized (numberSynchronizer){

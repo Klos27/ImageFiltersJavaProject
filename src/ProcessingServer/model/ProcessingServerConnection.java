@@ -102,19 +102,33 @@ public class ProcessingServerConnection implements Runnable {
             fos.close();
 
             // Delete original file and processed File
-            Files.deleteIfExists(FileSystems.getDefault().getPath(processedFileName));
-            Files.deleteIfExists(FileSystems.getDefault().getPath(clientsFileName));
+//            Files.deleteIfExists(FileSystems.getDefault().getPath(processedFileName));
+//            Files.deleteIfExists(FileSystems.getDefault().getPath(clientsFileName));
 
             // END OF CONNECTION
         }
         catch(EOFException e) {
-            System.out.println("EOF:"+e.getMessage()); }
+            System.out.println("EOF: "+e.getMessage()); }
         catch(IOException e) {
-            System.out.println("IO:"+e.getMessage());}
+            System.out.println("IO: "+e.getMessage());}
+        catch(java.lang.OutOfMemoryError e){
+            System.out.println("Out of memory: "+e.getMessage());
+        }
         finally {
             if(loadAdded) {
                 ProcessingServer.subLoad(fileSize);
                 loadAdded = false;
+            }
+            // Delete original file and processed File
+            try {
+                Files.deleteIfExists(FileSystems.getDefault().getPath(processedFileName));
+            } catch (IOException e) {
+//                e.printStackTrace();
+            }
+            try {
+                Files.deleteIfExists(FileSystems.getDefault().getPath(clientsFileName));
+            } catch (IOException e) {
+//                e.printStackTrace();
             }
             try {
                 clientSocket.close();

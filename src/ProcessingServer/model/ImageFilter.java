@@ -72,25 +72,30 @@ public class ImageFilter {
   8 == BlueImage
    */
     public static boolean convertImage(String pathName, int type){
-        switch (type){
-            case 1:
-                return sepia(pathName);
-            case 2:
-                return negative(pathName);
-            case 3:
-                return mirror(pathName);
-            case 4:
-                return grayScale(pathName);
-            case 5:
-                return blackAndWhite(pathName);
-            case 6:
-                return redImage(pathName);
-            case 7:
-                return greenImage(pathName);
-            case 8:
-                return blueImage(pathName);
-            default:
-                return sepia(pathName);
+        try{
+            switch (type){
+                case 1:
+                    return sepia(pathName);
+                case 2:
+                    return negative(pathName);
+                case 3:
+                    return mirror(pathName);
+                case 4:
+                    return grayScale(pathName);
+                case 5:
+                    return blackAndWhite(pathName);
+                case 6:
+                    return redImage(pathName);
+                case 7:
+                    return greenImage(pathName);
+                case 8:
+                    return blueImage(pathName);
+                default:
+                    return sepia(pathName);
+            }
+        }
+        catch (Exception e){
+            throw e;
         }
     }
 

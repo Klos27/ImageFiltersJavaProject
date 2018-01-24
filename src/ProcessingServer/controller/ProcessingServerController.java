@@ -153,7 +153,7 @@ public class ProcessingServerController {
         double systemCPULoad = osBean.getSystemCpuLoad();
         double processCPULoad = osBean.getProcessCpuLoad();
 
-        serverLoadLabel.setText(String.valueOf(server.getLoad() / 1048576) + " MB");
+        serverLoadLabel.setText(String.valueOf(server.getLoadedBytes()) + " B");
         ramFreeLabel.setText(String.valueOf(freeMemory / 1048576) + " MB");
 
         // max ram for JVM running this app
