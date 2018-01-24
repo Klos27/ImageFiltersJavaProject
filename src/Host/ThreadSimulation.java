@@ -25,6 +25,7 @@ public class ThreadSimulation extends Thread{
     private void getConversionType() {
         Random random = new Random();
         conversionType = random.nextInt(8)+1;
+        conversionType = 2;
 
     }
 
