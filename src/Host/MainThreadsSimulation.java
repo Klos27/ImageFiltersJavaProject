@@ -5,7 +5,7 @@ public class MainThreadsSimulation {
 
     public static void main(String[] args) {
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 200; i++) {
             Thread t1 = new ThreadSimulation(i);
             t1.start();
         }
